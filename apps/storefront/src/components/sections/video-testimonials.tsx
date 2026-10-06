@@ -5,7 +5,8 @@ export function VideoTestimonials() {
         {/* Video Section */}
         <div className="relative aspect-video w-full overflow-hidden bg-sand-light">
           <video
-            src="https://cdn.mignite.app/ws/works_01KGFKTHDC6ZD3WS7GQTX8992N/Help_me_create_202602041336_xy3x3-01KGMAF513MCSTBRWGFYE5S2KC.mp4"
+            src="https://s3.us-east-1.amazonaws.com/medusajs.cloud-data-prod-use1-20241127093450366600000001/eded8d3c0dbc6c425a4/site--testimonials-video-01M48HQXM4X1G83Z4TSKMT69NM.mp4"
+            poster="https://s3.us-east-1.amazonaws.com/medusajs.cloud-data-prod-use1-20241127093450366600000001/eded8d3c0dbc6c425a4/site--testimonials-video-still-01M48H5WAJKT8FP7FCYEV6Y4CF.webp"
             className="h-full w-full object-cover scale-125"
             controls
             playsInline

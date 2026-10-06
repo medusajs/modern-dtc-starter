@@ -7,7 +7,7 @@ const OurStory = () => {
       <section className="relative w-full min-h-[60vh] flex items-center justify-center bg-sand-100">
         <div className="absolute inset-0">
           <img
-            src="https://cdn.mignite.app/ws/works_01KGFKTHDC6ZD3WS7GQTX8992N/generated-01KGHSDPQM7Z6D9PGFG9E15S5P-01KGHSDPQMZFXQV23Z6NVYBARS.jpeg"
+            src="https://s3.us-east-1.amazonaws.com/medusajs.cloud-data-prod-use1-20241127093450366600000001/eded8d3c0dbc6c425a4/site--our-story-hero-01M48EJFC7V36VZFQ74VXNFHBJ.webp"
             alt="Our Story"
             className="w-full h-full object-cover opacity-90"
           />
@@ -43,7 +43,7 @@ const OurStory = () => {
       <LifestyleEditorial
         title="Our Design Philosophy"
         description="We design for the fluid modern life. Our garments move seamlessly from morning meditation to afternoon meetings, from evening walks to weekend adventures. Inspired by Scandinavian minimalism, we embrace a form-follows-function approach with quiet confidence. We work exclusively with Nordic textile mills to source the finest performance fabrics, blending technical innovation with natural fibers. Each piece undergoes rigorous testing in real-world conditions, ensuring it performs flawlessly wherever your day takes you."
-        imageUrl="https://cdn.mignite.app/ws/works_01KGFKTHDC6ZD3WS7GQTX8992N/generated-01KGHSDRC8S3W0SDN3NM9DBDEY-01KGHSDRC8N7MA0ANZ24ASXJHT.jpeg"
+        imageUrl="https://s3.us-east-1.amazonaws.com/medusajs.cloud-data-prod-use1-20241127093450366600000001/eded8d3c0dbc6c425a4/site--our-story-philosophy-01M48EJH0SH1M7JSG9P9T48QAM.webp"
       />
 
       {/* Core Values */}

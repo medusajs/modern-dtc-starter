@@ -46,19 +46,19 @@ const Home = () => {
           id: collections[0]?.id || "",
           title: collections[0]?.title || "",
           handle: collections[0]?.handle || "",
-          imageUrl: "https://cdn.mignite.app/ws/works_01KGFKTHDC6ZD3WS7GQTX8992N/NanoBanana-2026-02-04-01KGMCGE8HA4MP3JQAJ1PAEGGX.png",
+          imageUrl: "https://s3.us-east-1.amazonaws.com/medusajs.cloud-data-prod-use1-20241127093450366600000001/eded8d3c0dbc6c425a4/site--collection-core-essentials-01M48EJDWPRNSMK6M29WB9K2EV.webp",
         },
         {
           id: collections[1]?.id || "",
           title: collections[1]?.title || "",
           handle: collections[1]?.handle || "",
-          imageUrl: "https://cdn.mignite.app/ws/works_01KGFKTHDC6ZD3WS7GQTX8992N/NanoBanana-2026-02-04-1--01KGMCJ09NGECFMM8QVAY13MY3.png",
+          imageUrl: "https://s3.us-east-1.amazonaws.com/medusajs.cloud-data-prod-use1-20241127093450366600000001/eded8d3c0dbc6c425a4/site--collection-studio-training-01M48EJFP3RB0P8V8CJTA7QTQ0.webp",
         },
         {
           id: collections.find((c: HttpTypes.StoreCollection) => c.handle === "outer-layers")?.id || collections[2]?.id || "",
           title: collections.find((c: HttpTypes.StoreCollection) => c.handle === "outer-layers")?.title || collections[2]?.title || "",
           handle: "outer-layers",
-          imageUrl: "https://cdn.mignite.app/ws/works_01KGFKTHDC6ZD3WS7GQTX8992N/Gro-nano_banana_pro_20260204_133831_1--01KGMCNPB3SC30ZKSH1ZPWX149.jpeg",
+          imageUrl: "https://s3.us-east-1.amazonaws.com/medusajs.cloud-data-prod-use1-20241127093450366600000001/eded8d3c0dbc6c425a4/site--collection-outer-layers-01M48EJFJYBVC4JBR7DK5Q9V58.webp",
         },
       ]
     : []
@@ -68,7 +68,8 @@ const Home = () => {
       {/* Sticky background video */}
       <div className="sticky top-0 w-full h-[100vh] overflow-hidden -z-10">
         <video
-          src="https://cdn.mignite.app/ws/works_01KGFKTHDC6ZD3WS7GQTX8992N/Bring_a_bit_202602041404_u6uf6-01KGMC3H3BPBGYA1KXAMFFT0AM.mp4"
+          src="https://s3.us-east-1.amazonaws.com/medusajs.cloud-data-prod-use1-20241127093450366600000001/eded8d3c0dbc6c425a4/site--home-hero-video-01M48HQXEBSMEN7WQ4KEC79R3D.mp4"
+          poster="https://s3.us-east-1.amazonaws.com/medusajs.cloud-data-prod-use1-20241127093450366600000001/eded8d3c0dbc6c425a4/site--hero-video-still-01M48H5X701RA30DBZRQGZS5N7.webp"
           autoPlay
           loop
           muted
@@ -119,7 +120,7 @@ const Home = () => {
         description="Essentials is built for the in-between moments — the walk to the studio, the coffee after training, the quiet hours at home."
         ctaText="Our Story"
         ctaHref={`/${countryCode}/about`}
-        imageUrl="https://cdn.mignite.app/ws/works_01KGFKTHDC6ZD3WS7GQTX8992N/nano_banana_pro_20260204_141238_1-01KGMCQQ1KXNTY3K55VA3T84KE.png"
+        imageUrl="https://s3.us-east-1.amazonaws.com/medusajs.cloud-data-prod-use1-20241127093450366600000001/eded8d3c0dbc6c425a4/site--home-lifestyle-editorial-01M48EJFA1VTCAKNS334EAMB3Z.webp"
       />
 
       {/* Collection Showcase */}

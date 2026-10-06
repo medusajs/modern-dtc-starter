@@ -67,7 +67,7 @@ export default function OrderConfirmation({
       subtitle:
         "Minimalist joggers with a tailored silhouette—ideal for travel or downtime.",
       thumbnail:
-        "https://cdn.mignite.app/ws/works_01KGFKTHDC6ZD3WS7GQTX8992N/-NanoBanana-2026-02-05-5-2-01KGSBR3R5A1KXA1MBX09R0YJ1.jpeg",
+        "https://s3.us-east-1.amazonaws.com/medusajs.cloud-data-prod-use1-20241127093450366600000001/eded8d3c0dbc6c425a4/relaxed-jogger-pant--charcoal--1-01M48EJ3XHRBG7C5CQBTGW55JP.webp",
       quantity: 1,
       unit_price: 50,
       total: 50,
