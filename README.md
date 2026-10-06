@@ -109,8 +109,6 @@ The Medusa Admin runs at `http://localhost:9000/app`. To run only one app, use `
 | `COOKIE_SECRET` | Secret used to sign cookies |
 | `SKIP_INITIAL_SEED` | Set to `true` to skip seeding the demo data |
 
-To store uploaded files in S3 or Cloudflare R2, set the `S3_*` or `R2_*` variables used in `apps/backend/medusa-config.ts`.
-
 ### Storefront
 
 | Variable | Description |
