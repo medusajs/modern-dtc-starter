@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Medusa Fashion Starter: a pnpm + Turborepo monorepo with a Medusa v2 backend (`apps/backend`) and a TanStack Start storefront (`apps/storefront`).
+Modern DTC Starter: a pnpm + Turborepo monorepo with a Medusa v2 backend (`apps/backend`) and a TanStack Start storefront (`apps/storefront`).
 
 ## Before You Start
 
@@ -12,7 +12,7 @@ Medusa Fashion Starter: a pnpm + Turborepo monorepo with a Medusa v2 backend (`a
 ## Where to Look
 
 | Task | Path in this repo | Read first |
-|------|-------------------|------------|
+| --- | --- | --- |
 | Custom API route | `apps/backend/src/api/store/<name>/route.ts` (see `best-selling/route.ts`) | `@medusajs/framework` |
 | Middleware, store search config | `apps/backend/src/api/middlewares.ts` | `@medusajs/framework` |
 | Search index definitions | `apps/backend/src/search/product.ts`, `src/search/helpers/` | `@medusajs/framework`, `@medusajs/medusa` |
@@ -30,7 +30,7 @@ This repo has no workflows, custom modules, module links, subscribers, or jobs y
 
 ## Project Structure
 
-```
+```text
 .
 ├── apps/
 │   ├── backend/                  # Medusa v2 backend + admin
@@ -61,7 +61,7 @@ This repo has no workflows, custom modules, module links, subscribers, or jobs y
 Run from the repo root unless noted.
 
 | Command | What it does |
-|---------|--------------|
+| --- | --- |
 | `pnpm dev` | Backend (`:9000`, admin at `/app`) + storefront |
 | `pnpm backend:dev` / `pnpm storefront:dev` | One app only |
 | `pnpm build` | Builds both apps |
@@ -75,7 +75,7 @@ Run from the repo root unless noted.
 Database (run in `apps/backend`):
 
 | Command | What it does |
-|---------|--------------|
+| --- | --- |
 | `npx medusa db:migrate` | Migrations + initial seed (migration scripts) |
 | `npx medusa db:migrate:search` | Registers `src/search/*` indexes. Required after adding or changing an index |
 | `npx medusa user -e <email> -p <password>` | Creates an admin user |
@@ -95,7 +95,7 @@ find node_modules apps/*/node_modules -maxdepth 6 -path "*/@medusajs/*/AGENTS.md
 ```
 
 | Package | Read it for |
-|---------|-------------|
+| --- | --- |
 | `@medusajs/framework` | API routes, middlewares, workflows SDK, modules, links, subscribers, jobs, `query`, utils |
 | `@medusajs/medusa` | Core commerce modules, built-in routes, config defaults, search |
 | `@medusajs/core-flows` | Built-in workflows to reuse for commerce mutations (installed via `@medusajs/medusa`) |
@@ -115,10 +115,12 @@ Use sources in this order:
 
 1. The package `AGENTS.md` in `node_modules`.
 2. Medusa skills ([install guide](https://docs.medusajs.com/learn/introduction/build-with-llms-ai/agentic-skills)):
+
    ```bash
    /plugin marketplace add medusajs/medusa-agent-skills
    /plugin install medusa-dev@medusa
    ```
+
 3. The docs MCP server, or plain-text docs.
 
 Docs MCP server:
@@ -127,7 +129,7 @@ Docs MCP server:
 claude mcp add --transport http medusa https://docs.medusajs.com/mcp
 ```
 
-Without MCP, use https://docs.medusajs.com/llms.txt, or append `.md` to any `docs.medusajs.com` page URL.
+Without MCP, use <https://docs.medusajs.com/llms.txt>, or append `.md` to any `docs.medusajs.com` page URL.
 
 **Medusa Cloud MCP** (projects deployed on Medusa Cloud):
 

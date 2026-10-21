@@ -8,7 +8,7 @@
   </a>
 </p>
 <h1 align="center">
-  Medusa Fashion Starter
+  Modern DTC Starter
 </h1>
 
 <h4 align="center">
@@ -61,8 +61,8 @@ A ready-to-launch fashion and apparel store built with Medusa. It pairs a Medusa
 1. Clone the repository and install dependencies:
 
    ```bash
-   git clone https://github.com/medusajs/fashion-starter.git
-   cd fashion-starter
+   git clone https://github.com/medusajs/modern-dtc-starter.git
+   cd modern-dtc-starter
    pnpm install
    ```
 
