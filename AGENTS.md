@@ -17,7 +17,7 @@ Modern DTC Starter: a pnpm + Turborepo monorepo with a Medusa v2 backend (`apps/
 | Middleware, store search config | `apps/backend/src/api/middlewares.ts` | `@medusajs/framework` |
 | Search index definitions | `apps/backend/src/search/product.ts`, `src/search/helpers/` | `@medusajs/framework`, `@medusajs/medusa` |
 | Seed data, data migrations | `apps/backend/src/migration-scripts/`, `src/scripts/seed.ts` | `@medusajs/framework`, `@medusajs/core-flows` |
-| Order emails | `apps/backend/src/email-templates/` | `@medusajs/email-preview-server` |
+| Order emails | `apps/backend/src/email-templates/` | `@react-email/components` |
 | Admin extensions | `apps/backend/src/admin/` (widgets in `widgets/`, pages in `routes/`) | `@medusajs/admin-sdk`, `@medusajs/ui`, `@medusajs/icons` |
 | Medusa config (modules, plugins, CORS) | `apps/backend/medusa-config.ts` | `@medusajs/framework`, `@medusajs/medusa` |
 | Backend tests | `apps/backend/integration-tests/http/` | `@medusajs/test-utils` |
@@ -70,7 +70,6 @@ Run from the repo root unless noted.
 | `pnpm lint` | Lints the backend only (`medusa lint`) |
 | `pnpm --filter storefront exec eslint .` | Lints the storefront (it has no `lint` script) |
 | `pnpm --filter backend test:integration:http` | Backend HTTP integration tests |
-| `pnpm --filter backend email:dev` | Email template preview on `:9004` |
 
 Database (run in `apps/backend`):
 
