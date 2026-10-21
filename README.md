@@ -55,7 +55,6 @@ A ready-to-launch fashion and apparel store built with Medusa. It pairs a Medusa
 - [Node.js](https://nodejs.org/) v22.22+
 - [pnpm](https://pnpm.io/) v10+
 - [PostgreSQL](https://www.postgresql.org/)
-- [Redis](https://redis.io/)
 
 ## Installation
 
@@ -69,11 +68,12 @@ A ready-to-launch fashion and apparel store built with Medusa. It pairs a Medusa
 
 2. Create `apps/backend/.env` and set the [backend environment variables](#backend).
 
-3. Run the migrations. This also seeds the demo store data:
+3. Run the migrations and register the search index. The migrations also seed the demo store data:
 
    ```bash
    cd apps/backend
    npx medusa db:migrate
+   npx medusa db:migrate:search
    ```
 
 4. Create an admin user:
@@ -94,6 +94,16 @@ pnpm dev
 
 The Medusa Admin runs at `http://localhost:9000/app`. To run only one app, use `pnpm backend:dev` or `pnpm storefront:dev`.
 
+## Project Structure
+
+```
+apps/
+├── backend/      # Medusa backend and admin (API routes, search indexes, emails, seed)
+└── storefront/   # TanStack Start storefront (routes, components, data fetching)
+```
+
+The repo is a pnpm workspace orchestrated with Turborepo.
+
 ## Configuration
 
 ### Backend
@@ -101,7 +111,6 @@ The Medusa Admin runs at `http://localhost:9000/app`. To run only one app, use `
 | Variable | Description |
 |----------|-------------|
 | `DATABASE_URL` | PostgreSQL connection URL |
-| `REDIS_URL` | Redis connection URL |
 | `STORE_CORS` | Allowed origins for the storefront |
 | `ADMIN_CORS` | Allowed origins for the Medusa Admin |
 | `AUTH_CORS` | Allowed origins for authentication routes |
@@ -116,9 +125,19 @@ The Medusa Admin runs at `http://localhost:9000/app`. To run only one app, use `
 | `VITE_MEDUSA_BACKEND_URL` | URL of the Medusa backend |
 | `VITE_MEDUSA_PUBLISHABLE_KEY` | Publishable API key of the store's sales channel |
 
+## Building with AI Agents
+
+- [AGENTS.md](./AGENTS.md): where things live, commands, and conventions for AI coding agents.
+- Package docs: installed `@medusajs/*` packages ship an `AGENTS.md` in `node_modules/@medusajs/<pkg>/` for the exact installed version (newer Medusa versions only).
+- [Medusa agent skills](https://docs.medusajs.com/learn/introduction/build-with-llms-ai/agentic-skills): Medusa-specific skills for Claude Code and other agents.
+- Docs MCP server: `claude mcp add --transport http medusa https://docs.medusajs.com/mcp`
+- Medusa Cloud MCP server, for stores deployed on Medusa Cloud: `claude mcp add --transport http medusa-cloud https://cloud.medusajs.com/mcp`
+
 ## Resources
 
 - [Medusa Documentation](https://docs.medusajs.com)
 - [Storefront Development](https://docs.medusajs.com/resources/storefront-development)
 - [Deploy to Medusa Cloud](https://docs.medusajs.com/cloud)
+- [Build with AI Assistants and LLMs](https://docs.medusajs.com/learn/introduction/build-with-llms-ai)
+- [Medusa docs for LLMs (llms.txt)](https://docs.medusajs.com/llms.txt)
 
