@@ -1,4 +1,8 @@
+import { useLoaderData } from "@tanstack/react-router"
+
 const Returns = () => {
+  const { current, regions } = useLoaderData({ from: "/$countryCode/returns" })
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="content-container pt-32 pb-16">
@@ -19,9 +23,11 @@ const Returns = () => {
                 Our Return Policy
               </h2>
               <div className="space-y-4 text-neutral-700 leading-relaxed">
-                <p>
-                  We offer free returns within 30 days of delivery for all unworn, unwashed items with original tags attached. We believe you should have ample time to try your pieces and ensure they're the perfect fit.
-                </p>
+                {current && (
+                  <p>
+                    We offer {current.freeReturns ? "free " : ""}returns within {current.returnWindowDays} days of delivery for all unworn, unwashed items with original tags attached. We believe you should have ample time to try your pieces and ensure they're the perfect fit.
+                  </p>
+                )}
                 <p>
                   Items must be returned in their original condition with all tags and packaging intact. Items showing signs of wear, washing, or damage cannot be accepted for return.
                 </p>
@@ -46,7 +52,10 @@ const Returns = () => {
                 
                 <p className="font-semibold text-neutral-900 mt-6">Step 3: Ship Your Return</p>
                 <p>
-                  We'll email you a prepaid return label. Simply attach it to your package and drop it off at your nearest postal location. Return shipping is free for all domestic orders.
+                  We'll email you a prepaid return label. Simply attach it to your package and drop it off at your nearest postal location.{" "}
+                  {current?.freeReturns
+                    ? "Return shipping is free."
+                    : "Return shipping costs are the customer's responsibility."}
                 </p>
                 
                 <p className="font-semibold text-neutral-900 mt-6">Step 4: Receive Your Refund</p>
@@ -71,15 +80,21 @@ const Returns = () => {
               </div>
             </div>
 
-            {/* International Returns */}
+            {/* Returns by Region */}
             <div className="bg-white border border-neutral-200 p-8">
               <h2 className="text-xl font-display font-semibold text-neutral-900 mb-6 uppercase tracking-wide">
-                International Returns
+                Returns by Region
               </h2>
               <div className="space-y-4 text-neutral-700 leading-relaxed">
-                <p>
-                  We accept returns from international customers within 30 days of delivery. However, customers are responsible for return shipping costs for international orders.
-                </p>
+                <ul className="space-y-2">
+                  {regions.map(({ id, name, policies }) => (
+                    <li key={id}>
+                      <span className="font-semibold text-neutral-900">{name}:</span>{" "}
+                      returns within {policies.returnWindowDays} days,{" "}
+                      {policies.freeReturns ? "free return shipping" : "return shipping paid by the customer"}
+                    </li>
+                  ))}
+                </ul>
                 <p>
                   Please contact our customer service team before shipping your return to receive instructions and ensure proper processing. Be sure to use a tracked shipping method.
                 </p>

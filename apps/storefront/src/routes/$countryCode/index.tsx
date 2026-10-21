@@ -1,9 +1,9 @@
 import Home from "@/pages/home"
 import { createFileRoute } from "@tanstack/react-router"
-import { getRegion } from "@/lib/data/regions"
-import { listProducts } from "@/lib/data/products"
-import { queryKeys } from "@/lib/utils/query-keys"
-import { getSiteUrl, STORE_NAME } from "@/lib/utils/site"
+import { getRegion, listRegions } from "@/lib/data/regions"
+import { buildRegionsReturnPolicies } from "@/lib/utils/store-policies"
+import { homeProductsQuery, productsInfiniteQueryOptions } from "@/lib/hooks/use-products"
+import { getSiteUrl, listCountryCodes, STORE_NAME } from "@/lib/utils/site"
 
 export const Route = createFileRoute("/$countryCode/")({
   loader: async ({ params, context }) => {
@@ -16,31 +16,32 @@ export const Route = createFileRoute("/$countryCode/")({
       queryFn: () => getRegion({ country_code: countryCode }),
     })
 
+    const regions = await listRegions({ fields: "id,metadata,*countries" })
+    const countryCodes = listCountryCodes(regions)
+    const returnPolicies = buildRegionsReturnPolicies(regions)
+
     if (!region) {
-      return { countryCode, region: null }
+      return { countryCode, region: null, countryCodes, returnPolicies }
     }
 
-    // Prefetch latest products for SSR (non-blocking)
-    // FeaturedProducts component will use cached data when available
-    queryClient.prefetchQuery({
-      queryKey: queryKeys.products.latest(4, region.id),
-      queryFn: () =>
-        listProducts({
-          query_params: {
-            limit: 4,
-            order: "-created_at",
-          },
-          region_id: region.id,
-        }),
-    })
+    await queryClient.ensureInfiniteQueryData(
+      productsInfiniteQueryOptions(homeProductsQuery(region.id))
+    )
 
     return {
       countryCode,
       region,
+      countryCodes,
+      returnPolicies,
     }
   },
+  headers: () => ({
+    "Cache-Control": "public, max-age=0, s-maxage=60, stale-while-revalidate=600",
+  }),
   head: ({ loaderData }) => {
-    const homeUrl = `${getSiteUrl()}/${loaderData?.countryCode}`
+    const siteUrl = getSiteUrl()
+    const homeUrl = `${siteUrl}/${loaderData?.countryCode}`
+    const countryCodes = loaderData?.countryCodes ?? []
     const structuredData = [
       {
         "@context": "https://schema.org",
@@ -60,8 +61,11 @@ export const Route = createFileRoute("/$countryCode/")({
         "@context": "https://schema.org",
         "@type": "Organization",
         name: STORE_NAME,
-        url: getSiteUrl(),
-        logo: `${getSiteUrl()}/images/medusa.svg`,
+        url: siteUrl,
+        logo: `${siteUrl}/images/medusa.svg`,
+        ...(loaderData?.returnPolicies?.length
+          ? { hasMerchantReturnPolicy: loaderData.returnPolicies }
+          : {}),
       },
     ]
     const title = `Welcome to Medusa Store`
@@ -101,7 +105,15 @@ export const Route = createFileRoute("/$countryCode/")({
           content: description,
         },
       ],
-      links: [{ rel: "canonical", href: homeUrl }],
+      links: [
+        { rel: "canonical", href: homeUrl },
+        ...countryCodes.map((code) => ({
+          rel: "alternate",
+          hrefLang: `en-${code.toUpperCase()}`,
+          href: `${siteUrl}/${code}`,
+        })),
+        { rel: "alternate", hrefLang: "x-default", href: `${siteUrl}/` },
+      ],
       scripts: [
         {
           type: "application/ld+json",

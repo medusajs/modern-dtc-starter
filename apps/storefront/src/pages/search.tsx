@@ -1,4 +1,5 @@
 import ProductCard from "@/components/product-card"
+import { webMcpTool } from "@/lib/utils/webmcp"
 import { HttpTypes } from "@medusajs/types"
 import { Link, useLoaderData } from "@tanstack/react-router"
 
@@ -18,6 +19,7 @@ const Search = () => {
         method="get"
         action={`/${countryCode}/search`}
         className="flex gap-2 mb-10 max-w-xl"
+        {...webMcpTool("search_products", "Search the store's products by keyword")}
       >
         <label htmlFor="search-page-q" className="sr-only">
           Search products

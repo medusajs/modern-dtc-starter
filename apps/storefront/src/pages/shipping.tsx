@@ -1,4 +1,10 @@
+import { formatPrice } from "@/lib/utils/price"
+import { useLoaderData } from "@tanstack/react-router"
+
 const Shipping = () => {
+  const { current, currencyCode, regions } = useLoaderData({ from: "/$countryCode/shipping" })
+  const isFree = current?.shippingRate === 0
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="content-container pt-32 pb-16">
@@ -7,26 +13,39 @@ const Shipping = () => {
             <h1 className="text-4xl md:text-5xl font-display font-semibold text-neutral-900 mb-4 tracking-tight">
               Shipping Information
             </h1>
-            <p className="text-lg text-neutral-600">
-              Free shipping on all orders, delivered with care
-            </p>
+            {isFree && (
+              <p className="text-lg text-neutral-600">
+                Free shipping on all orders, delivered with care
+              </p>
+            )}
           </div>
 
           <div className="space-y-8">
-            {/* Free Shipping */}
-            <div className="bg-white border border-neutral-200 p-8">
-              <h2 className="text-xl font-display font-semibold text-neutral-900 mb-6 uppercase tracking-wide">
-                Free Shipping on All Orders
-              </h2>
-              <div className="space-y-4 text-neutral-700 leading-relaxed">
-                <p>
-                  We believe exceptional service should come standard. That's why we offer free shipping on every order, regardless of size or destination.
-                </p>
-                <p>
-                  Your order will be carefully packaged in our signature sustainable packaging and shipped directly to your door at no additional cost.
+            {isFree && (
+              <div className="bg-white border border-neutral-200 p-8">
+                <h2 className="text-xl font-display font-semibold text-neutral-900 mb-6 uppercase tracking-wide">
+                  Free Shipping on All Orders
+                </h2>
+                <div className="space-y-4 text-neutral-700 leading-relaxed">
+                  <p>
+                    We believe exceptional service should come standard. That's why we offer free shipping on every order, regardless of size or destination.
+                  </p>
+                  <p>
+                    Your order will be carefully packaged in our signature sustainable packaging and shipped directly to your door at no additional cost.
+                  </p>
+                </div>
+              </div>
+            )}
+            {current && !isFree && (
+              <div className="bg-white border border-neutral-200 p-8">
+                <h2 className="text-xl font-display font-semibold text-neutral-900 mb-6 uppercase tracking-wide">
+                  Shipping Costs
+                </h2>
+                <p className="text-neutral-700 leading-relaxed">
+                  Standard shipping is {formatPrice({ amount: current.shippingRate, currency_code: currencyCode })} per order.
                 </p>
               </div>
-            </div>
+            )}
 
             {/* Delivery Times */}
             <div className="bg-white border border-neutral-200 p-8">
@@ -34,26 +53,14 @@ const Shipping = () => {
                 Delivery Timeframes
               </h2>
               <div className="space-y-6 text-neutral-700 leading-relaxed">
-                <div>
-                  <h3 className="font-semibold text-neutral-900 mb-2">United States</h3>
-                  <p>Standard delivery: 3-5 business days</p>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-neutral-900 mb-2">Europe</h3>
-                  <p>Standard delivery: 4-7 business days</p>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-neutral-900 mb-2">United Kingdom</h3>
-                  <p>Standard delivery: 3-6 business days</p>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-neutral-900 mb-2">Denmark</h3>
-                  <p>Standard delivery: 2-4 business days</p>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-neutral-900 mb-2">Rest of World</h3>
-                  <p>Standard delivery: 7-14 business days</p>
-                </div>
+                {regions.map(({ id, name, policies }) => (
+                  <div key={id}>
+                    <h3 className="font-semibold text-neutral-900 mb-2">{name}</h3>
+                    <p>
+                      Standard delivery: {policies.transitDays.min}-{policies.transitDays.max} business days
+                    </p>
+                  </div>
+                ))}
                 <p className="text-sm text-neutral-600 mt-4">
                   Delivery times are estimates and begin from the date of dispatch. Orders placed before 2pm (CET) Monday-Friday are typically dispatched the same day.
                 </p>
@@ -67,7 +74,8 @@ const Shipping = () => {
               </h2>
               <div className="space-y-4 text-neutral-700 leading-relaxed">
                 <p>
-                  Orders are typically processed and shipped within 1-2 business days. You'll receive a shipping confirmation email with tracking information once your order has been dispatched.
+                  Orders are typically processed and shipped within{" "}
+                  {current ? `${current.handlingDays.min}-${current.handlingDays.max}` : "a few"} business days. You'll receive a shipping confirmation email with tracking information once your order has been dispatched.
                 </p>
                 <p>
                   Please note that orders placed on weekends or holidays will be processed on the next business day.

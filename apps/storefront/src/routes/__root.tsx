@@ -29,6 +29,7 @@ export const Route = createRootRouteWithContext<{
     links: [
       { rel: "icon", href: "/images/medusa.svg" },
       { rel: "stylesheet", href: appCss },
+      { rel: "ucp", href: "/.well-known/ucp" },
     ],
     meta: [
       { title: "Medusa Storefront" },

@@ -3,12 +3,12 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer"
 import { SearchHit, type ProductHit } from "@/components/search/search-hit"
 import { useSearchSettled } from "@/lib/hooks/use-search-settled"
 import { PRODUCT_INDEX_NAME, searchClient } from "@/lib/search-client"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
+import { webMcpTool } from "@/lib/utils/webmcp"
 import { MagnifyingGlass } from "@medusajs/icons"
 import { useLocation, useNavigate } from "@tanstack/react-router"
 import type { SearchClient } from "instantsearch.js"
@@ -75,6 +75,7 @@ const SearchPanel = ({ countryCode, onNavigate }: SearchPanelProps) => {
           })
         }}
         className="flex items-center gap-x-3 border-b border-zinc-200 px-6"
+        {...webMcpTool("search_products", "Search the store's products by keyword")}
       >
         <MagnifyingGlass className="flex-shrink-0 text-neutral-500" />
         <input
@@ -141,13 +142,18 @@ export const SearchDrawer = () => {
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerTrigger
+      <a
+        href={`/${countryCode}/search`}
+        onClick={(event) => {
+          event.preventDefault()
+          setIsOpen(true)
+        }}
         aria-label="Search products"
         className="flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors"
         data-testid="nav-search-button"
       >
         <MagnifyingGlass className="w-5 h-5" />
-      </DrawerTrigger>
+      </a>
       <DrawerContent side="right" className="flex flex-col">
         <DrawerHeader>
           <DrawerTitle className="uppercase font-display text-lg tracking-wide">

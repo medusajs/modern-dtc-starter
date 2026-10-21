@@ -1,5 +1,6 @@
 import { getRegion } from "@/lib/data/regions"
 import { CART_KEY } from "@/lib/utils/cart"
+import { cartCookie, readCookie } from "@/lib/utils/server-cart"
 import { getVariantOptionsKeymap } from "@/lib/utils/product"
 import { sdk } from "@/lib/utils/sdk"
 import { HttpTypes } from "@medusajs/types"
@@ -7,13 +8,6 @@ import { createFileRoute } from "@tanstack/react-router"
 import { isEqual } from "lodash-es"
 
 const MAX_QUANTITY = 100
-
-const readCookie = (request: Request, name: string) =>
-  request.headers
-    .get("cookie")
-    ?.split("; ")
-    .find((row) => row.startsWith(`${name}=`))
-    ?.split("=")[1] || undefined
 
 const resolveVariantId = async (form: FormData, regionId: string) => {
   const productId = form.get("product_id")?.toString()
@@ -99,7 +93,7 @@ export const Route = createFileRoute("/$countryCode/cart_/add")({
           status: 303,
           headers: {
             Location: `/${params.countryCode}/cart`,
-            "Set-Cookie": `${CART_KEY}=${cartId}; Path=/; Max-Age=${60 * 60 * 24 * 30}; SameSite=Lax`,
+            "Set-Cookie": cartCookie(cartId),
           },
         })
       },

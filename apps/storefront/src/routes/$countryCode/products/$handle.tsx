@@ -1,15 +1,23 @@
-import { listProducts, retrieveProduct } from "@/lib/data/products"
-import { getRegion } from "@/lib/data/regions"
-import { queryKeys } from "@/lib/utils/query-keys"
+import { retrieveProduct } from "@/lib/data/products"
+import { getRegion, listRegions } from "@/lib/data/regions"
+import {
+  buildReturnPolicy,
+  buildShippingDetails,
+  getRegionPolicies,
+} from "@/lib/utils/store-policies"
+import { cachedOnServer } from "@/lib/utils/server-cache"
 import ProductDetails from "@/pages/product"
 import { HttpTypes } from "@medusajs/types"
 import { createFileRoute, notFound } from "@tanstack/react-router"
 import { sanitize } from "@/lib/utils/sanitize"
 import { isVariantInStock } from "@/lib/utils/product"
-import { getSiteUrl, STORE_NAME } from "@/lib/utils/site"
+import { getSiteUrl, listCountryCodes, STORE_NAME } from "@/lib/utils/site"
 
 const SCHEMA_IN_STOCK = "https://schema.org/InStock"
 const SCHEMA_OUT_OF_STOCK = "https://schema.org/OutOfStock"
+const PRODUCT_TTL_MS = 60 * 1000
+const PRODUCT_FIELDS =
+  "*variants, +variants.inventory_quantity, +variants.manage_inventory, +variants.allow_backorder, +variants.calculated_price, *variants.images, *images, *options, *options.values, *collection, *tags"
 
 export const Route = createFileRoute("/$countryCode/products/$handle")({
   validateSearch: (search: Record<string, unknown>): { variant?: string } => ({
@@ -28,57 +36,33 @@ export const Route = createFileRoute("/$countryCode/products/$handle")({
       throw notFound()
     }
 
-    // Single comprehensive product fetch with all needed fields
-    const product = await queryClient.ensureQueryData({
-      queryKey: ["product", handle, region.id],
-      queryFn: async () => {
-        try {
-          return await retrieveProduct({
-            handle,
-            region_id: region.id,
-            fields:
-              "*variants, +variants.inventory_quantity, +variants.manage_inventory, +variants.allow_backorder, +variants.calculated_price, *variants.images, *images, *options, *options.values, *collection, *tags",
-          })
-        } catch {
-          throw notFound()
-        }
-      },
-    })
-
-    // Ensure related products are loaded for SSR to prevent hydration mismatch
-    // This ensures consistent rendering between server and client
-    await queryClient.ensureQueryData({
-      queryKey: queryKeys.products.related(product.id, region.id),
-      queryFn: async () => {
-        const params: HttpTypes.StoreProductListParams = {
-          fields: "title, handle, *thumbnail, *images, *variants",
-          is_giftcard: false,
-          limit: 4,
-        }
-
-        if (product.collection_id) {
-          params.collection_id = [product.collection_id]
-        }
-
-        if (product.tags && product.tags.length > 0) {
-          params.tag_id = product.tags.map((tag) => tag.id)
-        }
-
-        const { products } = await listProducts({
-          query_params: params,
-          region_id: region.id,
-        })
-
-        return products.filter((p) => p.id !== product.id)
-      },
-    })
+    const [product, regions] = await Promise.all([
+      queryClient.ensureQueryData({
+        queryKey: ["product", handle, region.id],
+        queryFn: async () => {
+          try {
+            return await cachedOnServer(`product:${handle}:${region.id}`, PRODUCT_TTL_MS, () =>
+              retrieveProduct({ handle, region_id: region.id, fields: PRODUCT_FIELDS })
+            )
+          } catch {
+            throw notFound()
+          }
+        },
+      }),
+      listRegions({ fields: "id,*countries" }),
+    ])
 
     return sanitize({
       countryCode,
       region,
       product: product as HttpTypes.StoreProduct,
+      countryCodes: listCountryCodes(regions),
     })
   },
+  headers: () => ({
+    "Cache-Control": "public, max-age=0, s-maxage=60, stale-while-revalidate=600",
+    Vary: "Accept",
+  }),
   head: ({ loaderData }) => {
     const { product, region } = loaderData || {}
 
@@ -92,11 +76,14 @@ export const Route = createFileRoute("/$countryCode/products/$handle")({
       }
     }
 
-    const productUrl = `${getSiteUrl()}/${loaderData?.countryCode}/products/${product.handle}`
+    const siteUrl = getSiteUrl()
+    const countryCode = loaderData?.countryCode ?? ""
+    const productUrl = `${siteUrl}/${countryCode}/products/${product.handle}`
     const currency = region?.currency_code?.toUpperCase()
     const images =
       product.images?.map((img: HttpTypes.StoreProductImage) => img.url).filter(Boolean) || []
     const description = product.description || product.title
+    const policies = getRegionPolicies(region)
     const brand = { "@type": "Brand", name: STORE_NAME }
 
     const buildOffer = (variant: HttpTypes.StoreProductVariant, url: string) => ({
@@ -107,6 +94,12 @@ export const Route = createFileRoute("/$countryCode/products/$handle")({
       priceCurrency: currency,
       availability: isVariantInStock(variant) ? SCHEMA_IN_STOCK : SCHEMA_OUT_OF_STOCK,
       itemCondition: "https://schema.org/NewCondition",
+      ...(policies
+        ? {
+            shippingDetails: buildShippingDetails(policies, countryCode, currency ?? ""),
+            hasMerchantReturnPolicy: buildReturnPolicy(policies, countryCode),
+          }
+        : {}),
     })
 
     const variants = (product.variants ?? []).filter(
@@ -207,6 +200,12 @@ export const Route = createFileRoute("/$countryCode/products/$handle")({
       ],
       links: [
         { rel: "canonical", href: productUrl },
+        { rel: "alternate", type: "text/markdown", href: `${productUrl}.md` },
+        ...(loaderData?.countryCodes ?? []).map((code: string) => ({
+          rel: "alternate",
+          hrefLang: `en-${code.toUpperCase()}`,
+          href: `${siteUrl}/${code}/products/${product.handle}`,
+        })),
         ...(firstImageUrl
           ? [
               {

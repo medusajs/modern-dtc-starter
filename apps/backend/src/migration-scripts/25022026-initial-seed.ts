@@ -21,6 +21,7 @@ import {
     updateStoresWorkflow,
 } from "@medusajs/medusa/core-flows";
 import { CreateProductCategoryDTO, CreateProductCollectionDTO } from "@medusajs/types";
+import { DEFAULT_REGION_STORE_POLICIES } from "../lib/region-store-policies";
 
 
 export default async function migration_25022026_initial_seed({
@@ -89,6 +90,7 @@ export default async function migration_25022026_initial_seed({
                             payment_providers: ["pp_system_default"],
                             automatic_taxes: false,
                             is_tax_inclusive: false,
+                            metadata: DEFAULT_REGION_STORE_POLICIES.us,
                         },
                         {
                             name: "Europe",
@@ -97,6 +99,7 @@ export default async function migration_25022026_initial_seed({
                             payment_providers: ["pp_system_default"],
                             automatic_taxes: true,
                             is_tax_inclusive: true,
+                            metadata: DEFAULT_REGION_STORE_POLICIES.de,
                         },
                         {
                             name: "United Kingdom",
@@ -105,6 +108,7 @@ export default async function migration_25022026_initial_seed({
                             payment_providers: ["pp_system_default"],
                             automatic_taxes: true,
                             is_tax_inclusive: true,
+                            metadata: DEFAULT_REGION_STORE_POLICIES.gb,
                         },
                         {
                             name: "Denmark",
@@ -113,6 +117,7 @@ export default async function migration_25022026_initial_seed({
                             payment_providers: ["pp_system_default"],
                             automatic_taxes: true,
                             is_tax_inclusive: true,
+                            metadata: DEFAULT_REGION_STORE_POLICIES.dk,
                         },
                     ],
                 },

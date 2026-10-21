@@ -1,22 +1,24 @@
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query"
+import { infiniteQueryOptions, useQuery, useInfiniteQuery } from "@tanstack/react-query"
 import { HttpTypes } from "@medusajs/types"
 import { queryKeys } from "@/lib/utils/query-keys"
 import { sdk } from "@/lib/utils/sdk"
 
-export const useProducts = ({
-  query_params,
-  region_id,
-  optionValueIds,
-}: {
+type ProductsQueryParams = {
   query_params?: HttpTypes.StoreProductListParams
   region_id?: string
   optionValueIds?: string[]
-} = {}) => {
+}
+
+export const productsInfiniteQueryOptions = ({
+  query_params,
+  region_id,
+  optionValueIds,
+}: ProductsQueryParams = {}) => {
   const dedupedOptionValueIds = optionValueIds
     ? Array.from(new Set(optionValueIds.filter(Boolean)))
     : undefined
 
-  return useInfiniteQuery({
+  return infiniteQueryOptions({
     queryKey: queryKeys.products.list(query_params, region_id, dedupedOptionValueIds),
     queryFn: async ({ pageParam }) => {
       const limit = query_params?.limit || 12
@@ -48,6 +50,17 @@ export const useProducts = ({
     enabled: !!region_id,
   })
 }
+
+export const homeProductsQuery = (regionId?: string): ProductsQueryParams => ({
+  region_id: regionId,
+  query_params: {
+    limit: 8,
+    fields: "id,title,handle,thumbnail,*images,*variants,*variants.calculated_price",
+  },
+})
+
+export const useProducts = (params: ProductsQueryParams = {}) =>
+  useInfiniteQuery(productsInfiniteQueryOptions(params))
 
 export const useProduct = ({
   handle,

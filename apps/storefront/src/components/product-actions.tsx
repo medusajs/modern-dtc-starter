@@ -6,6 +6,7 @@ import { useCartDrawer } from "@/lib/hooks/use-cart-drawer"
 import { useAddToCart } from "@/lib/hooks/use-cart"
 import { getVariantOptionsKeymap, isVariantInStock } from "@/lib/utils/product"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
+import { webMcpTool } from "@/lib/utils/webmcp"
 import { HttpTypes } from "@medusajs/types"
 import { useLocation } from "@tanstack/react-router"
 import { isEqual } from "lodash-es"
@@ -151,6 +152,7 @@ const ProductActions = memo(function ProductActions({
       }}
       className="flex flex-col gap-y-6"
       ref={actionsRef}
+      {...webMcpTool("add_to_cart", "Add the selected product variant and quantity to the shopping cart")}
     >
       <input type="hidden" name="product_id" value={product.id} />
       {selectedVariant && (
