@@ -41,10 +41,13 @@ const Footer = () => {
               that move seamlessly from studio to street.
             </p>
             <div>
-              <p className="text-xs text-neutral-400 mb-2 uppercase tracking-wide">
+              <label
+                htmlFor="footer-country-select"
+                className="block text-xs text-neutral-400 mb-2 uppercase tracking-wide"
+              >
                 Region
-              </p>
-              <CountrySelect regions={regions ?? []} />
+              </label>
+              <CountrySelect id="footer-country-select" regions={regions ?? []} />
             </div>
           </div>
 

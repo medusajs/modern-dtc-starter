@@ -22,7 +22,7 @@ export const AccountDropdown = () => {
     <NavigationMenu.Root className="hidden lg:flex relative">
       <NavigationMenu.List>
         <NavigationMenu.Item className="relative">
-          <NavigationMenu.Trigger className="flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors">
+          <NavigationMenu.Trigger aria-label="Account" className="flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors">
             <User className="w-5 h-5" />
           </NavigationMenu.Trigger>
           <NavigationMenu.Content className="absolute right-0 top-full mt-2 bg-white border border-neutral-200 shadow-lg rounded-md min-w-[200px] z-50 data-[motion=from-start]:animate-enterFromLeft data-[motion=from-end]:animate-enterFromRight data-[motion=to-start]:animate-exitToLeft data-[motion=to-end]:animate-exitToRight">

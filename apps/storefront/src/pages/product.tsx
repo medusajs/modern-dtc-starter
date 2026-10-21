@@ -2,12 +2,14 @@ import ProductActions from "@/components/product-actions"
 import { ImageGalleryEnhanced } from "@/components/ui/image-gallery-enhanced"
 import { ProductAccordions } from "@/components/product/product-accordions"
 import { RelatedProducts } from "@/components/product/related-products"
-import { useLoaderData, useLocation } from "@tanstack/react-router"
+import { useLoaderData, useLocation, useSearch } from "@tanstack/react-router"
 import { useProducts } from "@/lib/hooks/use-products"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
 import { useState, useMemo, useCallback } from "react"
 import { HttpTypes } from "@medusajs/types"
 import { Share } from "@medusajs/icons"
+import { formatPrice } from "@/lib/utils/price"
+import { getRegionPolicies } from "@/lib/utils/store-policies"
 
 /**
  * Enhanced Product Page
@@ -24,7 +26,11 @@ const ProductDetails = () => {
   const { product, region } = useLoaderData({
     from: "/$countryCode/products/$handle",
   })
-  
+  const { variant: initialVariantId } = useSearch({
+    from: "/$countryCode/products/$handle",
+  })
+
+  const policies = getRegionPolicies(region)
   const location = useLocation()
   const countryCode = getCountryCodeFromPath(location.pathname) || "us"
 
@@ -144,6 +150,7 @@ const ProductDetails = () => {
               <ProductActions 
                 product={product} 
                 region={region}
+                initialVariantId={initialVariantId}
                 onVariantChange={handleVariantChange}
                 onOptionsChange={handleOptionsChange}
               />
@@ -173,21 +180,29 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        {/* Free Shipping & Returns Info Box */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          <div className="bg-neutral-50 p-8 rounded-lg">
-            <h3 className="text-lg font-semibold text-neutral-900 mb-3">Free Shipping</h3>
-            <p className="text-sm text-neutral-700 leading-relaxed">
-              Enjoy free standard shipping on all orders. Your items will be carefully packaged and delivered to your doorstep at no extra cost.
-            </p>
+        {policies && (
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <div className="bg-neutral-50 p-8 rounded-lg">
+              <h3 className="text-lg font-semibold text-neutral-900 mb-3">
+                {policies.shippingRate === 0 ? "Free Shipping" : "Shipping"}
+              </h3>
+              <p className="text-sm text-neutral-700 leading-relaxed">
+                {policies.shippingRate === 0
+                  ? "Enjoy free standard shipping on all orders."
+                  : `Standard shipping is ${formatPrice({ amount: policies.shippingRate, currency_code: region.currency_code })} per order.`}{" "}
+                Orders ship within {policies.handlingDays.min}-{policies.handlingDays.max} business days and arrive in{" "}
+                {policies.transitDays.min}-{policies.transitDays.max} business days.
+              </p>
+            </div>
+            <div className="bg-neutral-50 p-8 rounded-lg">
+              <h3 className="text-lg font-semibold text-neutral-900 mb-3">Hassle-Free Returns</h3>
+              <p className="text-sm text-neutral-700 leading-relaxed">
+                Not completely satisfied? Return your unworn items within {policies.returnWindowDays} days for a full refund.
+                {policies.freeReturns ? " Free return shipping included." : ""}
+              </p>
+            </div>
           </div>
-          <div className="bg-neutral-50 p-8 rounded-lg">
-            <h3 className="text-lg font-semibold text-neutral-900 mb-3">Hassle-Free Returns</h3>
-            <p className="text-sm text-neutral-700 leading-relaxed">
-              Not completely satisfied? Return your unworn items within 30 days for a full refund. Free return shipping included.
-            </p>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Related Products */}

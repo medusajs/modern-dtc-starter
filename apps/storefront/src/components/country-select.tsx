@@ -1,10 +1,3 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { useCreateCart, useUpdateCart } from "@/lib/hooks/use-cart"
 import { getStoredCart } from "@/lib/utils/cart"
 import {
@@ -27,9 +20,10 @@ type CountryOption = {
 type CountrySelectProps = {
   regions: HttpTypes.StoreRegion[];
   className?: string;
+  id?: string;
 };
 
-const CountrySelect = ({ regions, className }: CountrySelectProps) => {
+const CountrySelect = ({ regions, className, id }: CountrySelectProps) => {
   const navigate = useNavigate()
   const location = useLocation()
   const pathCountryCode = getCountryCodeFromPath(location.pathname)
@@ -89,28 +83,22 @@ const CountrySelect = ({ regions, className }: CountrySelectProps) => {
   }
 
   return (
-    <Select value={pathCountryCode || ""} onValueChange={handleChange}>
-      <SelectTrigger 
-        variant="minimal" 
-        className={clsx(
-          "text-sm text-white w-full justify-start font-normal",
-          className
-        )}
-      >
-        <SelectValue placeholder="Select country">
-          {currentCountry
-            ? `${currentCountry.label} (${currentCountry.currency_code})`
-            : "Select country"}
-        </SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        {countries?.map((country) => (
-          <SelectItem key={country.country_code} value={country.country_code}>
-            {country.label} ({country.currency_code})
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <select
+      id={id}
+      value={pathCountryCode || ""}
+      onChange={(event) => handleChange(event.target.value)}
+      className={clsx(
+        "text-sm text-white bg-transparent w-full font-normal cursor-pointer focus:outline-none [&>option]:text-neutral-900",
+        className
+      )}
+    >
+      {!currentCountry && <option value="">Select country</option>}
+      {countries?.map((country) => (
+        <option key={country.country_code} value={country.country_code}>
+          {country.label} ({country.currency_code})
+        </option>
+      ))}
+    </select>
   )
 }
 

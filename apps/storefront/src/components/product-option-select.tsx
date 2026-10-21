@@ -22,20 +22,21 @@ const ProductOptionSelect: React.FC<ProductOptionSelectProps> = ({
   const filteredOptions = (option.values ?? []).map((v) => v.value)
 
   return (
-    <div className="flex flex-col gap-y-3">
-      <span className="text-sm">Select {title}</span>
+    <fieldset className="flex flex-col gap-y-3" disabled={disabled}>
+      <legend className="text-sm mb-3">Select {title}</legend>
       <div
         className="flex flex-wrap justify-between gap-2"
         data-testid={dataTestId}
       >
         {filteredOptions.map((v) => {
           const isActive = v === current
+          const inputId = `option-${option.id}-${v}`
           return (
-            <button
-              onClick={() => updateOption(option.id, v)}
+            <label
               key={v}
+              htmlFor={inputId}
               className={clsx(
-                "border text-sm font-medium px-4 py-2.5 flex-1 rounded-base transition-all duration-200 ease-in-out",
+                "border text-sm font-medium px-4 py-2.5 flex-1 rounded-base text-center cursor-pointer transition-all duration-200 ease-in-out has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zinc-900",
                 {
                   // Active state
                   "border-zinc-900 bg-zinc-50 text-zinc-900 shadow-sm":
@@ -50,15 +51,23 @@ const ProductOptionSelect: React.FC<ProductOptionSelectProps> = ({
                   "opacity-50 cursor-not-allowed": disabled,
                 }
               )}
-              disabled={disabled}
               data-testid="option-button"
             >
+              <input
+                type="radio"
+                id={inputId}
+                name={`options[${option.id}]`}
+                value={v}
+                checked={isActive}
+                onChange={() => updateOption(option.id, v)}
+                className="sr-only"
+              />
               {v}
-            </button>
+            </label>
           )
         })}
       </div>
-    </div>
+    </fieldset>
   )
 }
 

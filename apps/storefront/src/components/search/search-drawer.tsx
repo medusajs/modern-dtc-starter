@@ -3,14 +3,14 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer"
 import { SearchHit, type ProductHit } from "@/components/search/search-hit"
 import { useSearchSettled } from "@/lib/hooks/use-search-settled"
 import { PRODUCT_INDEX_NAME, searchClient } from "@/lib/search-client"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
+import { webMcpTool } from "@/lib/utils/webmcp"
 import { MagnifyingGlass } from "@medusajs/icons"
-import { useLocation } from "@tanstack/react-router"
+import { useLocation, useNavigate } from "@tanstack/react-router"
 import type { SearchClient } from "instantsearch.js"
 import { useCallback, useEffect, useRef, useState } from "react"
 import {
@@ -31,6 +31,7 @@ type SearchPanelProps = {
 
 const SearchPanel = ({ countryCode, onNavigate }: SearchPanelProps) => {
   const timer = useRef<number | undefined>(undefined)
+  const navigate = useNavigate()
 
   const queryHook = useCallback(
     (nextQuery: string, search: (value: string) => void) => {
@@ -59,10 +60,27 @@ const SearchPanel = ({ countryCode, onNavigate }: SearchPanelProps) => {
 
   return (
     <>
-      <div className="flex items-center gap-x-3 border-b border-zinc-200 px-6">
+      <form
+        role="search"
+        method="get"
+        action={`/${countryCode}/search`}
+        onSubmit={(event) => {
+          event.preventDefault()
+          if (!trimmedInput) return
+          onNavigate()
+          navigate({
+            to: "/$countryCode/search",
+            params: { countryCode },
+            search: { q: trimmedInput },
+          })
+        }}
+        className="flex items-center gap-x-3 border-b border-zinc-200 px-6"
+        {...webMcpTool("search_products", "Search the store's products by keyword")}
+      >
         <MagnifyingGlass className="flex-shrink-0 text-neutral-500" />
         <input
           type="search"
+          name="q"
           value={inputValue}
           onChange={(event) => {
             setInputValue(event.target.value)
@@ -74,7 +92,7 @@ const SearchPanel = ({ countryCode, onNavigate }: SearchPanelProps) => {
           className="w-full bg-transparent py-4 text-base text-neutral-900 outline-none placeholder:text-neutral-500"
           data-testid="search-input"
         />
-      </div>
+      </form>
 
       <div className="flex-1 overflow-y-auto">
         {!hasInput ? (
@@ -124,13 +142,18 @@ export const SearchDrawer = () => {
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerTrigger
+      <a
+        href={`/${countryCode}/search`}
+        onClick={(event) => {
+          event.preventDefault()
+          setIsOpen(true)
+        }}
         aria-label="Search products"
         className="flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors"
         data-testid="nav-search-button"
       >
         <MagnifyingGlass className="w-5 h-5" />
-      </DrawerTrigger>
+      </a>
       <DrawerContent side="right" className="flex flex-col">
         <DrawerHeader>
           <DrawerTitle className="uppercase font-display text-lg tracking-wide">

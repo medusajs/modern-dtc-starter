@@ -10,6 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StoreRouteImport } from './routes/store'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as HealthRouteImport } from './routes/health'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
@@ -17,9 +21,13 @@ import { Route as CountryCodeRouteImport } from './routes/$countryCode'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CountryCodeIndexRouteImport } from './routes/$countryCode/index'
+import { Route as UcpMcpRouteImport } from './routes/ucp/mcp'
+import { Route as BuyItemsRouteImport } from './routes/buy/$items'
+import { Route as DotwellKnownUcpRouteImport } from './routes/[.]well-known/ucp'
 import { Route as CountryCodeTermsRouteImport } from './routes/$countryCode/terms'
 import { Route as CountryCodeStoreRouteImport } from './routes/$countryCode/store'
 import { Route as CountryCodeShippingRouteImport } from './routes/$countryCode/shipping'
+import { Route as CountryCodeSearchRouteImport } from './routes/$countryCode/search'
 import { Route as CountryCodeReturnsRouteImport } from './routes/$countryCode/returns'
 import { Route as CountryCodePrivacyRouteImport } from './routes/$countryCode/privacy'
 import { Route as CountryCodePaymentsRouteImport } from './routes/$countryCode/payments'
@@ -31,17 +39,49 @@ import { Route as CountryCodeCartRouteImport } from './routes/$countryCode/cart'
 import { Route as CountryCodeBlogRouteImport } from './routes/$countryCode/blog'
 import { Route as CountryCodeAccountRouteImport } from './routes/$countryCode/account'
 import { Route as CountryCodeAboutRouteImport } from './routes/$countryCode/about'
+import { Route as UcpV1IndexRouteImport } from './routes/ucp/v1/index'
 import { Route as CountryCodeAccountIndexRouteImport } from './routes/$countryCode/account/index'
+import { Route as CountryCodeProductsChar123handleChar125DotmdRouteImport } from './routes/$countryCode/products/{$handle}[.]md'
 import { Route as CountryCodeProductsHandleRouteImport } from './routes/$countryCode/products/$handle'
 import { Route as CountryCodeCollectionsHandleRouteImport } from './routes/$countryCode/collections/$handle'
 import { Route as CountryCodeCategoriesHandleRouteImport } from './routes/$countryCode/categories/$handle'
+import { Route as CountryCodeCartAddRouteImport } from './routes/$countryCode/cart_.add'
+import { Route as UcpV1CheckoutSessionsIndexRouteImport } from './routes/ucp/v1/checkout-sessions/index'
+import { Route as UcpV1CartIndexRouteImport } from './routes/ucp/v1/cart/index'
 import { Route as CountryCodeAccountOrdersIndexRouteImport } from './routes/$countryCode/account/orders/index'
+import { Route as UcpV1CheckoutSessionsIdRouteImport } from './routes/ucp/v1/checkout-sessions/$id'
+import { Route as UcpV1CatalogSearchRouteImport } from './routes/ucp/v1/catalog/search'
+import { Route as UcpV1CatalogLookupRouteImport } from './routes/ucp/v1/catalog/lookup'
+import { Route as UcpV1CartCartIdRouteImport } from './routes/ucp/v1/cart/$cartId'
 import { Route as CountryCodeOrderOrderIdConfirmedRouteImport } from './routes/$countryCode/order/$orderId/confirmed'
+import { Route as CountryCodeCartResumeCartIdRouteImport } from './routes/$countryCode/cart_.resume.$cartId'
 import { Route as CountryCodeAccountOrdersOrderIdRouteImport } from './routes/$countryCode/account/orders/$orderId'
+import { Route as UcpV1CheckoutSessionsIdCompleteRouteImport } from './routes/ucp/v1/checkout-sessions/$id.complete'
+import { Route as UcpV1CheckoutSessionsIdCancelRouteImport } from './routes/ucp/v1/checkout-sessions/$id.cancel'
 
 const StoreRoute = StoreRouteImport.update({
   id: '/store',
   path: '/store',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HealthRoute = HealthRouteImport.update({
@@ -79,6 +119,21 @@ const CountryCodeIndexRoute = CountryCodeIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CountryCodeRoute,
 } as any)
+const UcpMcpRoute = UcpMcpRouteImport.update({
+  id: '/ucp/mcp',
+  path: '/ucp/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuyItemsRoute = BuyItemsRouteImport.update({
+  id: '/buy/$items',
+  path: '/buy/$items',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotwellKnownUcpRoute = DotwellKnownUcpRouteImport.update({
+  id: '/.well-known/ucp',
+  path: '/.well-known/ucp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CountryCodeTermsRoute = CountryCodeTermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -92,6 +147,11 @@ const CountryCodeStoreRoute = CountryCodeStoreRouteImport.update({
 const CountryCodeShippingRoute = CountryCodeShippingRouteImport.update({
   id: '/shipping',
   path: '/shipping',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
+const CountryCodeSearchRoute = CountryCodeSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => CountryCodeRoute,
 } as any)
 const CountryCodeReturnsRoute = CountryCodeReturnsRouteImport.update({
@@ -149,11 +209,22 @@ const CountryCodeAboutRoute = CountryCodeAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => CountryCodeRoute,
 } as any)
+const UcpV1IndexRoute = UcpV1IndexRouteImport.update({
+  id: '/ucp/v1/',
+  path: '/ucp/v1/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CountryCodeAccountIndexRoute = CountryCodeAccountIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => CountryCodeAccountRoute,
 } as any)
+const CountryCodeProductsChar123handleChar125DotmdRoute =
+  CountryCodeProductsChar123handleChar125DotmdRouteImport.update({
+    id: '/products/{$handle}.md',
+    path: '/products/{$handle}.md',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
 const CountryCodeProductsHandleRoute =
   CountryCodeProductsHandleRouteImport.update({
     id: '/products/$handle',
@@ -172,16 +243,58 @@ const CountryCodeCategoriesHandleRoute =
     path: '/categories/$handle',
     getParentRoute: () => CountryCodeRoute,
   } as any)
+const CountryCodeCartAddRoute = CountryCodeCartAddRouteImport.update({
+  id: '/cart_/add',
+  path: '/cart/add',
+  getParentRoute: () => CountryCodeRoute,
+} as any)
+const UcpV1CheckoutSessionsIndexRoute =
+  UcpV1CheckoutSessionsIndexRouteImport.update({
+    id: '/ucp/v1/checkout-sessions/',
+    path: '/ucp/v1/checkout-sessions/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const UcpV1CartIndexRoute = UcpV1CartIndexRouteImport.update({
+  id: '/ucp/v1/cart/',
+  path: '/ucp/v1/cart/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CountryCodeAccountOrdersIndexRoute =
   CountryCodeAccountOrdersIndexRouteImport.update({
     id: '/orders/',
     path: '/orders/',
     getParentRoute: () => CountryCodeAccountRoute,
   } as any)
+const UcpV1CheckoutSessionsIdRoute = UcpV1CheckoutSessionsIdRouteImport.update({
+  id: '/ucp/v1/checkout-sessions/$id',
+  path: '/ucp/v1/checkout-sessions/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UcpV1CatalogSearchRoute = UcpV1CatalogSearchRouteImport.update({
+  id: '/ucp/v1/catalog/search',
+  path: '/ucp/v1/catalog/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UcpV1CatalogLookupRoute = UcpV1CatalogLookupRouteImport.update({
+  id: '/ucp/v1/catalog/lookup',
+  path: '/ucp/v1/catalog/lookup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UcpV1CartCartIdRoute = UcpV1CartCartIdRouteImport.update({
+  id: '/ucp/v1/cart/$cartId',
+  path: '/ucp/v1/cart/$cartId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CountryCodeOrderOrderIdConfirmedRoute =
   CountryCodeOrderOrderIdConfirmedRouteImport.update({
     id: '/order/$orderId/confirmed',
     path: '/order/$orderId/confirmed',
+    getParentRoute: () => CountryCodeRoute,
+  } as any)
+const CountryCodeCartResumeCartIdRoute =
+  CountryCodeCartResumeCartIdRouteImport.update({
+    id: '/cart_/resume/$cartId',
+    path: '/cart/resume/$cartId',
     getParentRoute: () => CountryCodeRoute,
   } as any)
 const CountryCodeAccountOrdersOrderIdRoute =
@@ -189,6 +302,18 @@ const CountryCodeAccountOrdersOrderIdRoute =
     id: '/orders/$orderId',
     path: '/orders/$orderId',
     getParentRoute: () => CountryCodeAccountRoute,
+  } as any)
+const UcpV1CheckoutSessionsIdCompleteRoute =
+  UcpV1CheckoutSessionsIdCompleteRouteImport.update({
+    id: '/complete',
+    path: '/complete',
+    getParentRoute: () => UcpV1CheckoutSessionsIdRoute,
+  } as any)
+const UcpV1CheckoutSessionsIdCancelRoute =
+  UcpV1CheckoutSessionsIdCancelRouteImport.update({
+    id: '/cancel',
+    path: '/cancel',
+    getParentRoute: () => UcpV1CheckoutSessionsIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -198,6 +323,10 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/health': typeof HealthRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/store': typeof StoreRoute
   '/$countryCode/about': typeof CountryCodeAboutRoute
   '/$countryCode/account': typeof CountryCodeAccountRouteWithChildren
@@ -210,17 +339,33 @@ export interface FileRoutesByFullPath {
   '/$countryCode/payments': typeof CountryCodePaymentsRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRoute
+  '/$countryCode/search': typeof CountryCodeSearchRoute
   '/$countryCode/shipping': typeof CountryCodeShippingRoute
   '/$countryCode/store': typeof CountryCodeStoreRoute
   '/$countryCode/terms': typeof CountryCodeTermsRoute
+  '/.well-known/ucp': typeof DotwellKnownUcpRoute
+  '/buy/$items': typeof BuyItemsRoute
+  '/ucp/mcp': typeof UcpMcpRoute
   '/$countryCode/': typeof CountryCodeIndexRoute
+  '/$countryCode/cart/add': typeof CountryCodeCartAddRoute
   '/$countryCode/categories/$handle': typeof CountryCodeCategoriesHandleRoute
   '/$countryCode/collections/$handle': typeof CountryCodeCollectionsHandleRoute
   '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRoute
+  '/$countryCode/products/{$handle}.md': typeof CountryCodeProductsChar123handleChar125DotmdRoute
   '/$countryCode/account/': typeof CountryCodeAccountIndexRoute
+  '/ucp/v1/': typeof UcpV1IndexRoute
   '/$countryCode/account/orders/$orderId': typeof CountryCodeAccountOrdersOrderIdRoute
+  '/$countryCode/cart/resume/$cartId': typeof CountryCodeCartResumeCartIdRoute
   '/$countryCode/order/$orderId/confirmed': typeof CountryCodeOrderOrderIdConfirmedRoute
+  '/ucp/v1/cart/$cartId': typeof UcpV1CartCartIdRoute
+  '/ucp/v1/catalog/lookup': typeof UcpV1CatalogLookupRoute
+  '/ucp/v1/catalog/search': typeof UcpV1CatalogSearchRoute
+  '/ucp/v1/checkout-sessions/$id': typeof UcpV1CheckoutSessionsIdRouteWithChildren
   '/$countryCode/account/orders/': typeof CountryCodeAccountOrdersIndexRoute
+  '/ucp/v1/cart/': typeof UcpV1CartIndexRoute
+  '/ucp/v1/checkout-sessions/': typeof UcpV1CheckoutSessionsIndexRoute
+  '/ucp/v1/checkout-sessions/$id/cancel': typeof UcpV1CheckoutSessionsIdCancelRoute
+  '/ucp/v1/checkout-sessions/$id/complete': typeof UcpV1CheckoutSessionsIdCompleteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -228,6 +373,10 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/health': typeof HealthRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/store': typeof StoreRoute
   '/$countryCode/about': typeof CountryCodeAboutRoute
   '/$countryCode/blog': typeof CountryCodeBlogRoute
@@ -239,17 +388,33 @@ export interface FileRoutesByTo {
   '/$countryCode/payments': typeof CountryCodePaymentsRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRoute
+  '/$countryCode/search': typeof CountryCodeSearchRoute
   '/$countryCode/shipping': typeof CountryCodeShippingRoute
   '/$countryCode/store': typeof CountryCodeStoreRoute
   '/$countryCode/terms': typeof CountryCodeTermsRoute
+  '/.well-known/ucp': typeof DotwellKnownUcpRoute
+  '/buy/$items': typeof BuyItemsRoute
+  '/ucp/mcp': typeof UcpMcpRoute
   '/$countryCode': typeof CountryCodeIndexRoute
+  '/$countryCode/cart/add': typeof CountryCodeCartAddRoute
   '/$countryCode/categories/$handle': typeof CountryCodeCategoriesHandleRoute
   '/$countryCode/collections/$handle': typeof CountryCodeCollectionsHandleRoute
   '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRoute
+  '/$countryCode/products/{$handle}.md': typeof CountryCodeProductsChar123handleChar125DotmdRoute
   '/$countryCode/account': typeof CountryCodeAccountIndexRoute
+  '/ucp/v1': typeof UcpV1IndexRoute
   '/$countryCode/account/orders/$orderId': typeof CountryCodeAccountOrdersOrderIdRoute
+  '/$countryCode/cart/resume/$cartId': typeof CountryCodeCartResumeCartIdRoute
   '/$countryCode/order/$orderId/confirmed': typeof CountryCodeOrderOrderIdConfirmedRoute
+  '/ucp/v1/cart/$cartId': typeof UcpV1CartCartIdRoute
+  '/ucp/v1/catalog/lookup': typeof UcpV1CatalogLookupRoute
+  '/ucp/v1/catalog/search': typeof UcpV1CatalogSearchRoute
+  '/ucp/v1/checkout-sessions/$id': typeof UcpV1CheckoutSessionsIdRouteWithChildren
   '/$countryCode/account/orders': typeof CountryCodeAccountOrdersIndexRoute
+  '/ucp/v1/cart': typeof UcpV1CartIndexRoute
+  '/ucp/v1/checkout-sessions': typeof UcpV1CheckoutSessionsIndexRoute
+  '/ucp/v1/checkout-sessions/$id/cancel': typeof UcpV1CheckoutSessionsIdCancelRoute
+  '/ucp/v1/checkout-sessions/$id/complete': typeof UcpV1CheckoutSessionsIdCompleteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -259,6 +424,10 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/health': typeof HealthRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/store': typeof StoreRoute
   '/$countryCode/about': typeof CountryCodeAboutRoute
   '/$countryCode/account': typeof CountryCodeAccountRouteWithChildren
@@ -271,17 +440,33 @@ export interface FileRoutesById {
   '/$countryCode/payments': typeof CountryCodePaymentsRoute
   '/$countryCode/privacy': typeof CountryCodePrivacyRoute
   '/$countryCode/returns': typeof CountryCodeReturnsRoute
+  '/$countryCode/search': typeof CountryCodeSearchRoute
   '/$countryCode/shipping': typeof CountryCodeShippingRoute
   '/$countryCode/store': typeof CountryCodeStoreRoute
   '/$countryCode/terms': typeof CountryCodeTermsRoute
+  '/.well-known/ucp': typeof DotwellKnownUcpRoute
+  '/buy/$items': typeof BuyItemsRoute
+  '/ucp/mcp': typeof UcpMcpRoute
   '/$countryCode/': typeof CountryCodeIndexRoute
+  '/$countryCode/cart_/add': typeof CountryCodeCartAddRoute
   '/$countryCode/categories/$handle': typeof CountryCodeCategoriesHandleRoute
   '/$countryCode/collections/$handle': typeof CountryCodeCollectionsHandleRoute
   '/$countryCode/products/$handle': typeof CountryCodeProductsHandleRoute
+  '/$countryCode/products/{$handle}.md': typeof CountryCodeProductsChar123handleChar125DotmdRoute
   '/$countryCode/account/': typeof CountryCodeAccountIndexRoute
+  '/ucp/v1/': typeof UcpV1IndexRoute
   '/$countryCode/account/orders/$orderId': typeof CountryCodeAccountOrdersOrderIdRoute
+  '/$countryCode/cart_/resume/$cartId': typeof CountryCodeCartResumeCartIdRoute
   '/$countryCode/order/$orderId/confirmed': typeof CountryCodeOrderOrderIdConfirmedRoute
+  '/ucp/v1/cart/$cartId': typeof UcpV1CartCartIdRoute
+  '/ucp/v1/catalog/lookup': typeof UcpV1CatalogLookupRoute
+  '/ucp/v1/catalog/search': typeof UcpV1CatalogSearchRoute
+  '/ucp/v1/checkout-sessions/$id': typeof UcpV1CheckoutSessionsIdRouteWithChildren
   '/$countryCode/account/orders/': typeof CountryCodeAccountOrdersIndexRoute
+  '/ucp/v1/cart/': typeof UcpV1CartIndexRoute
+  '/ucp/v1/checkout-sessions/': typeof UcpV1CheckoutSessionsIndexRoute
+  '/ucp/v1/checkout-sessions/$id/cancel': typeof UcpV1CheckoutSessionsIdCancelRoute
+  '/ucp/v1/checkout-sessions/$id/complete': typeof UcpV1CheckoutSessionsIdCompleteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -292,6 +477,10 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/health'
+    | '/llms.txt'
+    | '/robots.txt'
+    | '/search'
+    | '/sitemap.xml'
     | '/store'
     | '/$countryCode/about'
     | '/$countryCode/account'
@@ -304,17 +493,33 @@ export interface FileRouteTypes {
     | '/$countryCode/payments'
     | '/$countryCode/privacy'
     | '/$countryCode/returns'
+    | '/$countryCode/search'
     | '/$countryCode/shipping'
     | '/$countryCode/store'
     | '/$countryCode/terms'
+    | '/.well-known/ucp'
+    | '/buy/$items'
+    | '/ucp/mcp'
     | '/$countryCode/'
+    | '/$countryCode/cart/add'
     | '/$countryCode/categories/$handle'
     | '/$countryCode/collections/$handle'
     | '/$countryCode/products/$handle'
+    | '/$countryCode/products/{$handle}.md'
     | '/$countryCode/account/'
+    | '/ucp/v1/'
     | '/$countryCode/account/orders/$orderId'
+    | '/$countryCode/cart/resume/$cartId'
     | '/$countryCode/order/$orderId/confirmed'
+    | '/ucp/v1/cart/$cartId'
+    | '/ucp/v1/catalog/lookup'
+    | '/ucp/v1/catalog/search'
+    | '/ucp/v1/checkout-sessions/$id'
     | '/$countryCode/account/orders/'
+    | '/ucp/v1/cart/'
+    | '/ucp/v1/checkout-sessions/'
+    | '/ucp/v1/checkout-sessions/$id/cancel'
+    | '/ucp/v1/checkout-sessions/$id/complete'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -322,6 +527,10 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/health'
+    | '/llms.txt'
+    | '/robots.txt'
+    | '/search'
+    | '/sitemap.xml'
     | '/store'
     | '/$countryCode/about'
     | '/$countryCode/blog'
@@ -333,17 +542,33 @@ export interface FileRouteTypes {
     | '/$countryCode/payments'
     | '/$countryCode/privacy'
     | '/$countryCode/returns'
+    | '/$countryCode/search'
     | '/$countryCode/shipping'
     | '/$countryCode/store'
     | '/$countryCode/terms'
+    | '/.well-known/ucp'
+    | '/buy/$items'
+    | '/ucp/mcp'
     | '/$countryCode'
+    | '/$countryCode/cart/add'
     | '/$countryCode/categories/$handle'
     | '/$countryCode/collections/$handle'
     | '/$countryCode/products/$handle'
+    | '/$countryCode/products/{$handle}.md'
     | '/$countryCode/account'
+    | '/ucp/v1'
     | '/$countryCode/account/orders/$orderId'
+    | '/$countryCode/cart/resume/$cartId'
     | '/$countryCode/order/$orderId/confirmed'
+    | '/ucp/v1/cart/$cartId'
+    | '/ucp/v1/catalog/lookup'
+    | '/ucp/v1/catalog/search'
+    | '/ucp/v1/checkout-sessions/$id'
     | '/$countryCode/account/orders'
+    | '/ucp/v1/cart'
+    | '/ucp/v1/checkout-sessions'
+    | '/ucp/v1/checkout-sessions/$id/cancel'
+    | '/ucp/v1/checkout-sessions/$id/complete'
   id:
     | '__root__'
     | '/'
@@ -352,6 +577,10 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/health'
+    | '/llms.txt'
+    | '/robots.txt'
+    | '/search'
+    | '/sitemap.xml'
     | '/store'
     | '/$countryCode/about'
     | '/$countryCode/account'
@@ -364,17 +593,33 @@ export interface FileRouteTypes {
     | '/$countryCode/payments'
     | '/$countryCode/privacy'
     | '/$countryCode/returns'
+    | '/$countryCode/search'
     | '/$countryCode/shipping'
     | '/$countryCode/store'
     | '/$countryCode/terms'
+    | '/.well-known/ucp'
+    | '/buy/$items'
+    | '/ucp/mcp'
     | '/$countryCode/'
+    | '/$countryCode/cart_/add'
     | '/$countryCode/categories/$handle'
     | '/$countryCode/collections/$handle'
     | '/$countryCode/products/$handle'
+    | '/$countryCode/products/{$handle}.md'
     | '/$countryCode/account/'
+    | '/ucp/v1/'
     | '/$countryCode/account/orders/$orderId'
+    | '/$countryCode/cart_/resume/$cartId'
     | '/$countryCode/order/$orderId/confirmed'
+    | '/ucp/v1/cart/$cartId'
+    | '/ucp/v1/catalog/lookup'
+    | '/ucp/v1/catalog/search'
+    | '/ucp/v1/checkout-sessions/$id'
     | '/$countryCode/account/orders/'
+    | '/ucp/v1/cart/'
+    | '/ucp/v1/checkout-sessions/'
+    | '/ucp/v1/checkout-sessions/$id/cancel'
+    | '/ucp/v1/checkout-sessions/$id/complete'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -384,7 +629,21 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   HealthRoute: typeof HealthRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SearchRoute: typeof SearchRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StoreRoute: typeof StoreRoute
+  DotwellKnownUcpRoute: typeof DotwellKnownUcpRoute
+  BuyItemsRoute: typeof BuyItemsRoute
+  UcpMcpRoute: typeof UcpMcpRoute
+  UcpV1IndexRoute: typeof UcpV1IndexRoute
+  UcpV1CartCartIdRoute: typeof UcpV1CartCartIdRoute
+  UcpV1CatalogLookupRoute: typeof UcpV1CatalogLookupRoute
+  UcpV1CatalogSearchRoute: typeof UcpV1CatalogSearchRoute
+  UcpV1CheckoutSessionsIdRoute: typeof UcpV1CheckoutSessionsIdRouteWithChildren
+  UcpV1CartIndexRoute: typeof UcpV1CartIndexRoute
+  UcpV1CheckoutSessionsIndexRoute: typeof UcpV1CheckoutSessionsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -394,6 +653,34 @@ declare module '@tanstack/react-router' {
       path: '/store'
       fullPath: '/store'
       preLoaderRoute: typeof StoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/health': {
@@ -445,6 +732,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeIndexRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/ucp/mcp': {
+      id: '/ucp/mcp'
+      path: '/ucp/mcp'
+      fullPath: '/ucp/mcp'
+      preLoaderRoute: typeof UcpMcpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/buy/$items': {
+      id: '/buy/$items'
+      path: '/buy/$items'
+      fullPath: '/buy/$items'
+      preLoaderRoute: typeof BuyItemsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/ucp': {
+      id: '/.well-known/ucp'
+      path: '/.well-known/ucp'
+      fullPath: '/.well-known/ucp'
+      preLoaderRoute: typeof DotwellKnownUcpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$countryCode/terms': {
       id: '/$countryCode/terms'
       path: '/terms'
@@ -464,6 +772,13 @@ declare module '@tanstack/react-router' {
       path: '/shipping'
       fullPath: '/$countryCode/shipping'
       preLoaderRoute: typeof CountryCodeShippingRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/$countryCode/search': {
+      id: '/$countryCode/search'
+      path: '/search'
+      fullPath: '/$countryCode/search'
+      preLoaderRoute: typeof CountryCodeSearchRouteImport
       parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/returns': {
@@ -543,12 +858,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeAboutRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/ucp/v1/': {
+      id: '/ucp/v1/'
+      path: '/ucp/v1'
+      fullPath: '/ucp/v1/'
+      preLoaderRoute: typeof UcpV1IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$countryCode/account/': {
       id: '/$countryCode/account/'
       path: '/'
       fullPath: '/$countryCode/account/'
       preLoaderRoute: typeof CountryCodeAccountIndexRouteImport
       parentRoute: typeof CountryCodeAccountRoute
+    }
+    '/$countryCode/products/{$handle}.md': {
+      id: '/$countryCode/products/{$handle}.md'
+      path: '/products/{$handle}.md'
+      fullPath: '/$countryCode/products/{$handle}.md'
+      preLoaderRoute: typeof CountryCodeProductsChar123handleChar125DotmdRouteImport
+      parentRoute: typeof CountryCodeRoute
     }
     '/$countryCode/products/$handle': {
       id: '/$countryCode/products/$handle'
@@ -571,12 +900,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeCategoriesHandleRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/cart_/add': {
+      id: '/$countryCode/cart_/add'
+      path: '/cart/add'
+      fullPath: '/$countryCode/cart/add'
+      preLoaderRoute: typeof CountryCodeCartAddRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
+    '/ucp/v1/checkout-sessions/': {
+      id: '/ucp/v1/checkout-sessions/'
+      path: '/ucp/v1/checkout-sessions'
+      fullPath: '/ucp/v1/checkout-sessions/'
+      preLoaderRoute: typeof UcpV1CheckoutSessionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ucp/v1/cart/': {
+      id: '/ucp/v1/cart/'
+      path: '/ucp/v1/cart'
+      fullPath: '/ucp/v1/cart/'
+      preLoaderRoute: typeof UcpV1CartIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$countryCode/account/orders/': {
       id: '/$countryCode/account/orders/'
       path: '/orders'
       fullPath: '/$countryCode/account/orders/'
       preLoaderRoute: typeof CountryCodeAccountOrdersIndexRouteImport
       parentRoute: typeof CountryCodeAccountRoute
+    }
+    '/ucp/v1/checkout-sessions/$id': {
+      id: '/ucp/v1/checkout-sessions/$id'
+      path: '/ucp/v1/checkout-sessions/$id'
+      fullPath: '/ucp/v1/checkout-sessions/$id'
+      preLoaderRoute: typeof UcpV1CheckoutSessionsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ucp/v1/catalog/search': {
+      id: '/ucp/v1/catalog/search'
+      path: '/ucp/v1/catalog/search'
+      fullPath: '/ucp/v1/catalog/search'
+      preLoaderRoute: typeof UcpV1CatalogSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ucp/v1/catalog/lookup': {
+      id: '/ucp/v1/catalog/lookup'
+      path: '/ucp/v1/catalog/lookup'
+      fullPath: '/ucp/v1/catalog/lookup'
+      preLoaderRoute: typeof UcpV1CatalogLookupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ucp/v1/cart/$cartId': {
+      id: '/ucp/v1/cart/$cartId'
+      path: '/ucp/v1/cart/$cartId'
+      fullPath: '/ucp/v1/cart/$cartId'
+      preLoaderRoute: typeof UcpV1CartCartIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/$countryCode/order/$orderId/confirmed': {
       id: '/$countryCode/order/$orderId/confirmed'
@@ -585,12 +963,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CountryCodeOrderOrderIdConfirmedRouteImport
       parentRoute: typeof CountryCodeRoute
     }
+    '/$countryCode/cart_/resume/$cartId': {
+      id: '/$countryCode/cart_/resume/$cartId'
+      path: '/cart/resume/$cartId'
+      fullPath: '/$countryCode/cart/resume/$cartId'
+      preLoaderRoute: typeof CountryCodeCartResumeCartIdRouteImport
+      parentRoute: typeof CountryCodeRoute
+    }
     '/$countryCode/account/orders/$orderId': {
       id: '/$countryCode/account/orders/$orderId'
       path: '/orders/$orderId'
       fullPath: '/$countryCode/account/orders/$orderId'
       preLoaderRoute: typeof CountryCodeAccountOrdersOrderIdRouteImport
       parentRoute: typeof CountryCodeAccountRoute
+    }
+    '/ucp/v1/checkout-sessions/$id/complete': {
+      id: '/ucp/v1/checkout-sessions/$id/complete'
+      path: '/complete'
+      fullPath: '/ucp/v1/checkout-sessions/$id/complete'
+      preLoaderRoute: typeof UcpV1CheckoutSessionsIdCompleteRouteImport
+      parentRoute: typeof UcpV1CheckoutSessionsIdRoute
+    }
+    '/ucp/v1/checkout-sessions/$id/cancel': {
+      id: '/ucp/v1/checkout-sessions/$id/cancel'
+      path: '/cancel'
+      fullPath: '/ucp/v1/checkout-sessions/$id/cancel'
+      preLoaderRoute: typeof UcpV1CheckoutSessionsIdCancelRouteImport
+      parentRoute: typeof UcpV1CheckoutSessionsIdRoute
     }
   }
 }
@@ -622,13 +1021,17 @@ interface CountryCodeRouteChildren {
   CountryCodePaymentsRoute: typeof CountryCodePaymentsRoute
   CountryCodePrivacyRoute: typeof CountryCodePrivacyRoute
   CountryCodeReturnsRoute: typeof CountryCodeReturnsRoute
+  CountryCodeSearchRoute: typeof CountryCodeSearchRoute
   CountryCodeShippingRoute: typeof CountryCodeShippingRoute
   CountryCodeStoreRoute: typeof CountryCodeStoreRoute
   CountryCodeTermsRoute: typeof CountryCodeTermsRoute
   CountryCodeIndexRoute: typeof CountryCodeIndexRoute
+  CountryCodeCartAddRoute: typeof CountryCodeCartAddRoute
   CountryCodeCategoriesHandleRoute: typeof CountryCodeCategoriesHandleRoute
   CountryCodeCollectionsHandleRoute: typeof CountryCodeCollectionsHandleRoute
   CountryCodeProductsHandleRoute: typeof CountryCodeProductsHandleRoute
+  CountryCodeProductsChar123handleChar125DotmdRoute: typeof CountryCodeProductsChar123handleChar125DotmdRoute
+  CountryCodeCartResumeCartIdRoute: typeof CountryCodeCartResumeCartIdRoute
   CountryCodeOrderOrderIdConfirmedRoute: typeof CountryCodeOrderOrderIdConfirmedRoute
 }
 
@@ -644,19 +1047,40 @@ const CountryCodeRouteChildren: CountryCodeRouteChildren = {
   CountryCodePaymentsRoute: CountryCodePaymentsRoute,
   CountryCodePrivacyRoute: CountryCodePrivacyRoute,
   CountryCodeReturnsRoute: CountryCodeReturnsRoute,
+  CountryCodeSearchRoute: CountryCodeSearchRoute,
   CountryCodeShippingRoute: CountryCodeShippingRoute,
   CountryCodeStoreRoute: CountryCodeStoreRoute,
   CountryCodeTermsRoute: CountryCodeTermsRoute,
   CountryCodeIndexRoute: CountryCodeIndexRoute,
+  CountryCodeCartAddRoute: CountryCodeCartAddRoute,
   CountryCodeCategoriesHandleRoute: CountryCodeCategoriesHandleRoute,
   CountryCodeCollectionsHandleRoute: CountryCodeCollectionsHandleRoute,
   CountryCodeProductsHandleRoute: CountryCodeProductsHandleRoute,
+  CountryCodeProductsChar123handleChar125DotmdRoute:
+    CountryCodeProductsChar123handleChar125DotmdRoute,
+  CountryCodeCartResumeCartIdRoute: CountryCodeCartResumeCartIdRoute,
   CountryCodeOrderOrderIdConfirmedRoute: CountryCodeOrderOrderIdConfirmedRoute,
 }
 
 const CountryCodeRouteWithChildren = CountryCodeRoute._addFileChildren(
   CountryCodeRouteChildren,
 )
+
+interface UcpV1CheckoutSessionsIdRouteChildren {
+  UcpV1CheckoutSessionsIdCancelRoute: typeof UcpV1CheckoutSessionsIdCancelRoute
+  UcpV1CheckoutSessionsIdCompleteRoute: typeof UcpV1CheckoutSessionsIdCompleteRoute
+}
+
+const UcpV1CheckoutSessionsIdRouteChildren: UcpV1CheckoutSessionsIdRouteChildren =
+  {
+    UcpV1CheckoutSessionsIdCancelRoute: UcpV1CheckoutSessionsIdCancelRoute,
+    UcpV1CheckoutSessionsIdCompleteRoute: UcpV1CheckoutSessionsIdCompleteRoute,
+  }
+
+const UcpV1CheckoutSessionsIdRouteWithChildren =
+  UcpV1CheckoutSessionsIdRoute._addFileChildren(
+    UcpV1CheckoutSessionsIdRouteChildren,
+  )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -665,17 +1089,32 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   HealthRoute: HealthRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SearchRoute: SearchRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   StoreRoute: StoreRoute,
+  DotwellKnownUcpRoute: DotwellKnownUcpRoute,
+  BuyItemsRoute: BuyItemsRoute,
+  UcpMcpRoute: UcpMcpRoute,
+  UcpV1IndexRoute: UcpV1IndexRoute,
+  UcpV1CartCartIdRoute: UcpV1CartCartIdRoute,
+  UcpV1CatalogLookupRoute: UcpV1CatalogLookupRoute,
+  UcpV1CatalogSearchRoute: UcpV1CatalogSearchRoute,
+  UcpV1CheckoutSessionsIdRoute: UcpV1CheckoutSessionsIdRouteWithChildren,
+  UcpV1CartIndexRoute: UcpV1CartIndexRoute,
+  UcpV1CheckoutSessionsIndexRoute: UcpV1CheckoutSessionsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

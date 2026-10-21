@@ -415,13 +415,18 @@ export const CartDropdown = () => {
   return (
     <Drawer open={isOpen} onOpenChange={(open) => (open ? openCart() : closeCart())}>
       <DrawerTrigger asChild>
-        <button className="relative flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors">
+        <button
+          aria-label={`Cart, ${itemCount} ${itemCount === 1 ? "item" : "items"}`}
+          className="relative flex items-center justify-center text-neutral-700 hover:text-neutral-900 transition-colors"
+        >
           <ShoppingBag className="w-5 h-5" />
-          {itemCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-neutral-900 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-              {itemCount}
-            </span>
-          )}
+          <span aria-live="polite" className="absolute -top-1 -right-1">
+            {itemCount > 0 && (
+              <span className="bg-neutral-900 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                {itemCount}
+              </span>
+            )}
+          </span>
         </button>
       </DrawerTrigger>
 

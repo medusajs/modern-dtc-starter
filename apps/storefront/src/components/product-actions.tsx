@@ -6,6 +6,7 @@ import { useCartDrawer } from "@/lib/hooks/use-cart-drawer"
 import { useAddToCart } from "@/lib/hooks/use-cart"
 import { getVariantOptionsKeymap, isVariantInStock } from "@/lib/utils/product"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
+import { webMcpTool } from "@/lib/utils/webmcp"
 import { HttpTypes } from "@medusajs/types"
 import { useLocation } from "@tanstack/react-router"
 import { isEqual } from "lodash-es"
@@ -15,6 +16,7 @@ type ProductActionsProps = {
   product: HttpTypes.StoreProduct;
   region: HttpTypes.StoreRegion;
   disabled?: boolean;
+  initialVariantId?: string;
   onVariantChange?: (variant: HttpTypes.StoreProductVariant | undefined) => void;
   onOptionsChange?: (options: Record<string, string>) => void;
 };
@@ -23,12 +25,21 @@ const ProductActions = memo(function ProductActions({
   product,
   region,
   disabled,
+  initialVariantId,
   onVariantChange,
   onOptionsChange,
 }: ProductActionsProps) {
-  const [selectedOptions, setSelectedOptions] = useState<
-    Record<string, string | undefined>
-  >({})
+  const defaultOptions = useMemo(() => {
+    const variants = product?.variants ?? []
+    const defaultVariant =
+      variants.find((v) => v.id === initialVariantId) ??
+      variants.find(isVariantInStock) ??
+      variants[0]
+    return getVariantOptionsKeymap(defaultVariant?.options ?? []) ?? {}
+  }, [product?.variants, initialVariantId])
+
+  const [selectedOptions, setSelectedOptions] =
+    useState<Record<string, string | undefined>>(defaultOptions)
   const [quantity, setQuantity] = useState(1)
   const location = useLocation()
   const countryCode = getCountryCodeFromPath(location.pathname) || "dk"
@@ -38,21 +49,11 @@ const ProductActions = memo(function ProductActions({
   })
   const { openCart } = useCartDrawer()
 
-  const actionsRef = useRef<HTMLDivElement>(null)
+  const actionsRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
-    setSelectedOptions({})
-  }, [product?.handle])
-
-  // If there is only 1 variant, preselect the options
-  useEffect(() => {
-    if (product?.variants?.length === 1) {
-      const optionsKeymap = getVariantOptionsKeymap(
-        product?.variants?.[0]?.options ?? []
-      )
-      setSelectedOptions(optionsKeymap ?? {})
-    }
-  }, [product?.variants])
+    setSelectedOptions(defaultOptions)
+  }, [defaultOptions])
 
   const selectedVariant = useMemo(() => {
     if (!product?.variants || product?.variants.length === 0) {
@@ -142,15 +143,40 @@ const ProductActions = memo(function ProductActions({
   }
 
   return (
-    <div className="flex flex-col gap-y-6" ref={actionsRef}>
-      {/* Price */}
-      <ProductPrice
-        product={product as HttpTypes.StoreProduct}
-        variant={selectedVariant}
-        priceProps={{
-          textSize: "large",
-        }}
-      />
+    <form
+      method="post"
+      action={`/${countryCode}/cart/add`}
+      onSubmit={(event) => {
+        event.preventDefault()
+        handleAddToCart()
+      }}
+      className="flex flex-col gap-y-6"
+      ref={actionsRef}
+      {...webMcpTool("add_to_cart", "Add the selected product variant and quantity to the shopping cart")}
+    >
+      <input type="hidden" name="product_id" value={product.id} />
+      {selectedVariant && (
+        <input type="hidden" name="variant_id" value={selectedVariant.id} />
+      )}
+      <input type="hidden" name="quantity" value={quantity} />
+
+      <div className="flex flex-col gap-y-1">
+        <ProductPrice
+          product={product as HttpTypes.StoreProduct}
+          variant={selectedVariant}
+          priceProps={{
+            textSize: "large",
+          }}
+        />
+        {selectedVariant && (
+          <p
+            className={inStock ? "text-sm text-zinc-600" : "text-sm text-red-600"}
+            data-testid="product-availability"
+          >
+            {inStock ? "In stock" : "Out of stock"}
+          </p>
+        )}
+      </div>
 
       {/* Variant options (color, size, etc.) */}
       {(product.variants?.length ?? 0) > 1 && (
@@ -174,22 +200,24 @@ const ProductActions = memo(function ProductActions({
 
       {/* Quantity selector */}
       <div className="flex flex-col gap-y-2">
-        <label className="text-sm font-medium">Quantity</label>
-        <div className="flex items-center gap-x-4">
+        <span className="text-sm font-medium" id="quantity-label">Quantity</span>
+        <div className="flex items-center gap-x-4" role="group" aria-labelledby="quantity-label">
           <button
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
             disabled={quantity <= 1 || !!disabled}
             className="w-10 h-10 flex items-center justify-center border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             type="button"
+            aria-label="Decrease quantity"
           >
             -
           </button>
-          <span className="w-12 text-center font-medium">{quantity}</span>
+          <span className="w-12 text-center font-medium" aria-live="polite">{quantity}</span>
           <button
             onClick={() => setQuantity(quantity + 1)}
             disabled={!!disabled}
             className="w-10 h-10 flex items-center justify-center border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             type="button"
+            aria-label="Increase quantity"
           >
             +
           </button>
@@ -198,7 +226,7 @@ const ProductActions = memo(function ProductActions({
 
       {/* Add to cart button */}
       <Button
-        onClick={handleAddToCart}
+        type="submit"
         disabled={!inStock || !selectedVariant || !!disabled || !isValidVariant}
         variant="primary"
         className="w-full"
@@ -210,7 +238,7 @@ const ProductActions = memo(function ProductActions({
             ? "Out of stock"
             : "Add to cart"}
       </Button>
-    </div>
+    </form>
   )
 })
 

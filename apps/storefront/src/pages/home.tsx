@@ -1,6 +1,6 @@
 import { useLocation, useLoaderData, Link } from "@tanstack/react-router"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
-import { useProducts } from "@/lib/hooks/use-products"
+import { useProducts, homeProductsQuery } from "@/lib/hooks/use-products"
 import { useCollections } from "@/lib/hooks/use-collections"
 import { ProductGrid } from "@/components/sections/product-grid"
 import { LifestyleEditorial } from "@/components/sections/lifestyle-editorial"
@@ -27,13 +27,7 @@ const Home = () => {
   const countryCode = getCountryCodeFromPath(location.pathname) || "us"
 
   // Fetch featured products (showing first 8 products as bestsellers)
-  const { data: productsData } = useProducts({
-    region_id: region?.id,
-    query_params: { 
-      limit: 8,
-      fields: "id,title,handle,thumbnail,*images,*variants,*variants.calculated_price",
-    },
-  })
+  const { data: productsData } = useProducts(homeProductsQuery(region?.id))
 
   // Fetch collections for showcase
   const { data: collections } = useCollections({
