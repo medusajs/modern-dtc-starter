@@ -6,7 +6,13 @@ export const Route = createFileRoute("/$")({
     const firstSegment = location.pathname.split("/").filter(Boolean)[0]
 
     // A two-letter segment reaching the splat is already country-prefixed, so redirecting would loop.
-    if (!firstSegment || firstSegment.length === 2) {
+    // Dotfiles (/.well-known) and API paths (/ucp) are never storefront pages.
+    if (
+      !firstSegment ||
+      firstSegment.length === 2 ||
+      firstSegment.startsWith(".") ||
+      firstSegment === "ucp"
+    ) {
       throw notFound()
     }
 

@@ -16,6 +16,7 @@ import { getSiteUrl, listCountryCodes, STORE_NAME } from "@/lib/utils/site"
 const SCHEMA_IN_STOCK = "https://schema.org/InStock"
 const SCHEMA_OUT_OF_STOCK = "https://schema.org/OutOfStock"
 const PRODUCT_TTL_MS = 60 * 1000
+const PRODUCT_STALE_MS = 10 * 60 * 1000
 const PRODUCT_FIELDS =
   "*variants, +variants.inventory_quantity, +variants.manage_inventory, +variants.allow_backorder, +variants.calculated_price, *variants.images, *images, *options, *options.values, *collection, *tags"
 
@@ -41,8 +42,11 @@ export const Route = createFileRoute("/$countryCode/products/$handle")({
         queryKey: ["product", handle, region.id],
         queryFn: async () => {
           try {
-            return await cachedOnServer(`product:${handle}:${region.id}`, PRODUCT_TTL_MS, () =>
-              retrieveProduct({ handle, region_id: region.id, fields: PRODUCT_FIELDS })
+            return await cachedOnServer(
+              `product:${handle}:${region.id}`,
+              PRODUCT_TTL_MS,
+              () => retrieveProduct({ handle, region_id: region.id, fields: PRODUCT_FIELDS }),
+              PRODUCT_STALE_MS
             )
           } catch {
             throw notFound()

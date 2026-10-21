@@ -1,5 +1,5 @@
 import { getRequestOrigin } from "@/lib/utils/site"
-import { UCP_CAPABILITIES, UCP_REST_BASE_PATH, UCP_VERSION } from "@/lib/utils/ucp"
+import { UCP_CAPABILITIES, UCP_MCP_PATH, UCP_REST_BASE_PATH, UCP_VERSION } from "@/lib/utils/ucp"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/.well-known/ucp")({
@@ -20,6 +20,13 @@ export const Route = createFileRoute("/.well-known/ucp")({
             version: UCP_VERSION,
             services: {
               "dev.ucp.shopping": [
+                {
+                  version: UCP_VERSION,
+                  spec: `https://ucp.dev/${UCP_VERSION}/specification/overview/`,
+                  transport: "mcp",
+                  endpoint: `${origin}${UCP_MCP_PATH}`,
+                  schema: `https://ucp.dev/${UCP_VERSION}/services/shopping/mcp.openrpc.json`,
+                },
                 {
                   version: UCP_VERSION,
                   spec: `https://ucp.dev/${UCP_VERSION}/specification/overview/`,

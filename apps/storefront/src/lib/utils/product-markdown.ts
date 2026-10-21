@@ -22,8 +22,11 @@ export const renderProductMarkdown = async (
 
   const region = await getRegion({ country_code: countryCode })
   const product = region
-    ? await cachedOnServer(`product-md:${handle}:${region.id}`, 60 * 1000, () =>
-        retrieveProduct({ handle, region_id: region.id, fields: FIELDS })
+    ? await cachedOnServer(
+        `product-md:${handle}:${region.id}`,
+        60 * 1000,
+        () => retrieveProduct({ handle, region_id: region.id, fields: FIELDS }),
+        10 * 60 * 1000
       ).catch(() => null)
     : null
 
