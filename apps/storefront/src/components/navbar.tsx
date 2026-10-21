@@ -230,7 +230,7 @@ export const Navbar = () => {
 
               {/* Mobile Menu */}
               <Drawer>
-                <DrawerTrigger className="lg:hidden text-neutral-700 hover:text-neutral-900">
+                <DrawerTrigger aria-label="Open menu" className="lg:hidden text-neutral-700 hover:text-neutral-900">
                   <EllipsisHorizontal className="w-6 h-6" />
                 </DrawerTrigger>
                 <DrawerContent side="left">

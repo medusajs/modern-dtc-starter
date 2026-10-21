@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router"
 import { getRegion } from "@/lib/data/regions"
 import { listProducts } from "@/lib/data/products"
 import { queryKeys } from "@/lib/utils/query-keys"
+import { getSiteUrl, STORE_NAME } from "@/lib/utils/site"
 
 export const Route = createFileRoute("/$countryCode/")({
   loader: async ({ params, context }) => {
@@ -38,7 +39,31 @@ export const Route = createFileRoute("/$countryCode/")({
       region,
     }
   },
-  head: () => {
+  head: ({ loaderData }) => {
+    const homeUrl = `${getSiteUrl()}/${loaderData?.countryCode}`
+    const structuredData = [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: STORE_NAME,
+        url: homeUrl,
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${homeUrl}/search?q={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
+        },
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: STORE_NAME,
+        url: getSiteUrl(),
+        logo: `${getSiteUrl()}/images/medusa.svg`,
+      },
+    ]
     const title = `Welcome to Medusa Store`
     const description = `Discover our curated collection of products. Browse our latest featured items and shop with confidence.`
 
@@ -75,7 +100,14 @@ export const Route = createFileRoute("/$countryCode/")({
           property: "twitter:description",
           content: description,
         },
-      ]
+      ],
+      links: [{ rel: "canonical", href: homeUrl }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify(structuredData),
+        },
+      ],
     }
   },
   component: Home,

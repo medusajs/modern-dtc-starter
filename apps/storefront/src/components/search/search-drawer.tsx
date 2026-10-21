@@ -10,7 +10,7 @@ import { useSearchSettled } from "@/lib/hooks/use-search-settled"
 import { PRODUCT_INDEX_NAME, searchClient } from "@/lib/search-client"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
 import { MagnifyingGlass } from "@medusajs/icons"
-import { useLocation } from "@tanstack/react-router"
+import { useLocation, useNavigate } from "@tanstack/react-router"
 import type { SearchClient } from "instantsearch.js"
 import { useCallback, useEffect, useRef, useState } from "react"
 import {
@@ -31,6 +31,7 @@ type SearchPanelProps = {
 
 const SearchPanel = ({ countryCode, onNavigate }: SearchPanelProps) => {
   const timer = useRef<number | undefined>(undefined)
+  const navigate = useNavigate()
 
   const queryHook = useCallback(
     (nextQuery: string, search: (value: string) => void) => {
@@ -59,10 +60,26 @@ const SearchPanel = ({ countryCode, onNavigate }: SearchPanelProps) => {
 
   return (
     <>
-      <div className="flex items-center gap-x-3 border-b border-zinc-200 px-6">
+      <form
+        role="search"
+        method="get"
+        action={`/${countryCode}/search`}
+        onSubmit={(event) => {
+          event.preventDefault()
+          if (!trimmedInput) return
+          onNavigate()
+          navigate({
+            to: "/$countryCode/search",
+            params: { countryCode },
+            search: { q: trimmedInput },
+          })
+        }}
+        className="flex items-center gap-x-3 border-b border-zinc-200 px-6"
+      >
         <MagnifyingGlass className="flex-shrink-0 text-neutral-500" />
         <input
           type="search"
+          name="q"
           value={inputValue}
           onChange={(event) => {
             setInputValue(event.target.value)
@@ -74,7 +91,7 @@ const SearchPanel = ({ countryCode, onNavigate }: SearchPanelProps) => {
           className="w-full bg-transparent py-4 text-base text-neutral-900 outline-none placeholder:text-neutral-500"
           data-testid="search-input"
         />
-      </div>
+      </form>
 
       <div className="flex-1 overflow-y-auto">
         {!hasInput ? (

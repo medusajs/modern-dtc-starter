@@ -2,7 +2,7 @@ import ProductActions from "@/components/product-actions"
 import { ImageGalleryEnhanced } from "@/components/ui/image-gallery-enhanced"
 import { ProductAccordions } from "@/components/product/product-accordions"
 import { RelatedProducts } from "@/components/product/related-products"
-import { useLoaderData, useLocation } from "@tanstack/react-router"
+import { useLoaderData, useLocation, useSearch } from "@tanstack/react-router"
 import { useProducts } from "@/lib/hooks/use-products"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
 import { useState, useMemo, useCallback } from "react"
@@ -24,7 +24,10 @@ const ProductDetails = () => {
   const { product, region } = useLoaderData({
     from: "/$countryCode/products/$handle",
   })
-  
+  const { variant: initialVariantId } = useSearch({
+    from: "/$countryCode/products/$handle",
+  })
+
   const location = useLocation()
   const countryCode = getCountryCodeFromPath(location.pathname) || "us"
 
@@ -144,6 +147,7 @@ const ProductDetails = () => {
               <ProductActions 
                 product={product} 
                 region={region}
+                initialVariantId={initialVariantId}
                 onVariantChange={handleVariantChange}
                 onOptionsChange={handleOptionsChange}
               />
