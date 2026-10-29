@@ -2,7 +2,9 @@ import { Button } from "@/components/ui/button"
 import { useCompleteCartOrder } from "@/lib/hooks/use-checkout"
 import { isManual, isStripe } from "@/lib/utils/checkout"
 import { getCountryCodeFromPath } from "@/lib/utils/region"
+import { getPaymentErrorMessage } from "@/lib/utils/payment-error"
 import { HttpTypes } from "@medusajs/types"
+import { useElements, useStripe } from "@stripe/react-stripe-js"
 import { useLocation, useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 
@@ -23,7 +25,12 @@ const PaymentButton = ({ cart, className }: PaymentButtonProps) => {
 
   switch (true) {
     case isStripe(paymentSession?.provider_id):
-      return <StripePaymentButton notReady={notReady} className={className} />
+      return (
+        <StripePaymentButton
+          notReady={notReady}
+          className={className}
+        />
+      )
     case isManual(paymentSession?.provider_id):
       return <ManualPaymentButton notReady={notReady} className={className} />
     default:
@@ -39,17 +46,42 @@ const StripePaymentButton = ({
   className?: string;
 }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const countryCode = getCountryCodeFromPath(location.pathname)
   const completeOrderMutation = useCompleteCartOrder()
+  const stripe = useStripe()
+  const elements = useElements()
 
   const handlePayment = async () => {
+    if (!stripe || !elements) return
+
+    setSubmitting(true)
     setErrorMessage(null)
 
     try {
-      // For demo purposes, we'll complete the order directly
-      // In production, you'd integrate with Stripe's confirmCardPayment
+      const { error: submitError } = await elements.submit()
+      if (submitError) {
+        setErrorMessage(getPaymentErrorMessage(submitError))
+        setSubmitting(false)
+        return
+      }
+
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/${countryCode || "us"}/order/confirmed`,
+        },
+        redirect: "if_required",
+      })
+
+      if (error) {
+        setErrorMessage(getPaymentErrorMessage(error))
+        setSubmitting(false)
+        return
+      }
+
       const order = await completeOrderMutation.mutateAsync()
 
       // Navigate to order confirmation
@@ -62,13 +94,14 @@ const StripePaymentButton = ({
       setErrorMessage(
         error instanceof Error ? error.message : "Payment failed"
       )
+      setSubmitting(false)
     }
   }
 
   return (
     <>
       <Button
-        disabled={notReady || completeOrderMutation.isPending}
+        disabled={notReady || submitting || !stripe || !elements}
         onClick={handlePayment}
         data-testid="place-order-button"
         className={className}

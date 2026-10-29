@@ -27,6 +27,8 @@ const PaymentStep = ({ cart, onNext, onBack }: PaymentStepProps) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
     activeSession?.provider_id ?? ""
   )
+  const [isPaymentDetailsComplete, setIsPaymentDetailsComplete] =
+    useState(false)
 
   const isStripe = isStripeFunc(selectedPaymentMethod)
 
@@ -52,6 +54,7 @@ const PaymentStep = ({ cart, onNext, onBack }: PaymentStepProps) => {
     async (method: string) => {
       setError(null)
       setSelectedPaymentMethod(method)
+      setIsPaymentDetailsComplete(false)
 
       initiatePaymentSession(method)
     },
@@ -92,15 +95,13 @@ const PaymentStep = ({ cart, onNext, onBack }: PaymentStepProps) => {
                 selectedPaymentOptionId={selectedPaymentMethod}
                 onClick={() => handlePaymentMethodChange(paymentMethod.id)}
               >
-                {isStripeFunc(paymentMethod.id) && (
-                  <StripeCardContainer
-                    paymentProviderId={paymentMethod.id}
-                    selectedPaymentOptionId={selectedPaymentMethod}
-                    setError={setError}
-                    onSelect={() => handlePaymentMethodChange(paymentMethod.id)}
-                    onCardComplete={handleSubmit}
-                  />
-                )}
+                {isStripeFunc(paymentMethod.id) &&
+                  selectedPaymentMethod === paymentMethod.id && (
+                    <StripeCardContainer
+                      cart={cart}
+                      onPaymentDetailsComplete={setIsPaymentDetailsComplete}
+                    />
+                  )}
               </PaymentContainer>
             </div>
           ))}
@@ -141,7 +142,7 @@ const PaymentStep = ({ cart, onNext, onBack }: PaymentStepProps) => {
         <Button
           onClick={handleSubmit}
           disabled={
-            (isStripe && !activeSession) ||
+            (isStripe && (!activeSession || !isPaymentDetailsComplete)) ||
             (!selectedPaymentMethod && !paidByGiftcard) ||
             initiatePaymentSessionMutation.isPending
           }
