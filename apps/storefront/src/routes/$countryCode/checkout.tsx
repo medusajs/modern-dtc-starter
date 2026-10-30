@@ -5,12 +5,20 @@ import { CheckoutStepKey } from "@/lib/types/global"
 import { sanitize } from "@/lib/utils/sanitize"
 
 export const Route = createFileRoute("/$countryCode/checkout")({
-  validateSearch: (search): { step: CheckoutStepKey } => {
+  validateSearch: (
+    search
+  ): { step: CheckoutStepKey; redirectResult?: string } => {
     const step = search.step
+    // Adyen returns the shopper to the review step with `redirectResult` after a redirect, for
+    // example to their bank's authentication page.
+    const redirectResult =
+      typeof search.redirectResult === "string"
+        ? search.redirectResult
+        : undefined
     if (!Object.values(CheckoutStepKey).includes(step as CheckoutStepKey)) {
       return { step: CheckoutStepKey.ADDRESSES }
     }
-    return { step: step as CheckoutStepKey }
+    return { step: step as CheckoutStepKey, redirectResult }
   },
   loaderDeps: ({ search: { step } }) => {
     return {

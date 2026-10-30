@@ -1,5 +1,6 @@
 import CheckoutProgress from "@/components/checkout-progress"
 import { CartEmpty } from "@/components/cart"
+import { StripeElementsProvider } from "@/components/stripe-elements-provider"
 import { Loading } from "@/components/ui/loading"
 import { useCart } from "@/lib/hooks/use-cart"
 import { type CheckoutStep, CheckoutStepKey } from "@/lib/types/global"
@@ -117,6 +118,9 @@ const Checkout = () => {
     }
   }
 
+  const isPaymentOrReview =
+    step === CheckoutStepKey.PAYMENT || step === CheckoutStepKey.REVIEW
+
   return (
     <div className="content-container pt-40 pb-8 flex flex-col gap-8">
       {/* Progress Steps */}
@@ -159,18 +163,32 @@ const Checkout = () => {
                   />
                 )}
 
-                {/* Payment Step */}
-                {step === CheckoutStepKey.PAYMENT && (
-                  <PaymentStep
-                    cart={cart}
-                    onNext={handleNext}
-                    onBack={handleBack}
-                  />
-                )}
-
-                {/* Review Step */}
-                {step === CheckoutStepKey.REVIEW && (
-                  <ReviewStep cart={cart} onBack={handleBack} />
+                {/* Payment and Review Steps. The payment step stays mounted during review, so the card details
+                    entered in Stripe's payment element can be confirmed when placing the order. */}
+                {isPaymentOrReview && (
+                  <StripeElementsProvider cart={cart}>
+                    <div
+                      style={{
+                        visibility:
+                          step !== CheckoutStepKey.PAYMENT
+                            ? "hidden"
+                            : "visible",
+                        overflow:
+                          step !== CheckoutStepKey.PAYMENT ? "hidden" : "auto",
+                        height:
+                          step !== CheckoutStepKey.PAYMENT ? 0 : "auto",
+                      }}
+                    >
+                      <PaymentStep
+                        cart={cart}
+                        onNext={handleNext}
+                        onBack={handleBack}
+                      />
+                    </div>
+                    {step === CheckoutStepKey.REVIEW && (
+                      <ReviewStep cart={cart} onBack={handleBack} />
+                    )}
+                  </StripeElementsProvider>
                 )}
               </>
             )}
