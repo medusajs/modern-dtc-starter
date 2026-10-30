@@ -14,6 +14,16 @@ export const isMedusaPayments = (providerId?: string) => {
   return !!providerId?.startsWith(MEDUSA_PAYMENTS_PREFIX)
 }
 
+/*
+ * Adyen registers its provider with the ID `pp_adyen_{id}`, where `{id}` is the ID set in
+ * `medusa-config.ts`. Its Drop-in offers cards, Apple Pay, and Google Pay.
+ */
+const ADYEN_PREFIX = "pp_adyen_"
+
+export const isAdyen = (providerId?: string) => {
+  return !!providerId?.startsWith(ADYEN_PREFIX)
+}
+
 // Medusa Payments returns the Stripe account that holds the payment, which Stripe.js has to be initialized with.
 // It isn't derived from the provider ID, as non-production environments take payments with a sandbox account.
 export const getMedusaPaymentsAccount = (paymentSession?: {
