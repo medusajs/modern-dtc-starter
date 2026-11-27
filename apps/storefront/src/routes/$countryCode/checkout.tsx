@@ -7,7 +7,11 @@ import { sanitize } from "@/lib/utils/sanitize"
 export const Route = createFileRoute("/$countryCode/checkout")({
   validateSearch: (
     search
-  ): { step: CheckoutStepKey; redirectResult?: string } => {
+  ): {
+    step: CheckoutStepKey
+    redirectResult?: string
+    redirect_status?: string
+  } => {
     const step = search.step
     // Adyen returns the shopper to the review step with `redirectResult` after a redirect, for
     // example to their bank's authentication page.
@@ -15,10 +19,16 @@ export const Route = createFileRoute("/$countryCode/checkout")({
       typeof search.redirectResult === "string"
         ? search.redirectResult
         : undefined
+    // Stripe returns the shopper to the review step with `redirect_status` after a redirect, for
+    // example to iDEAL or Klarna.
+    const redirect_status =
+      typeof search.redirect_status === "string"
+        ? search.redirect_status
+        : undefined
     if (!Object.values(CheckoutStepKey).includes(step as CheckoutStepKey)) {
       return { step: CheckoutStepKey.ADDRESSES }
     }
-    return { step: step as CheckoutStepKey, redirectResult }
+    return { step: step as CheckoutStepKey, redirectResult, redirect_status }
   },
   loaderDeps: ({ search: { step } }) => {
     return {
